@@ -385,7 +385,9 @@
                                 <span class="sr-only">Error:</span>
                                 Portfolio must be a positive integer.
                             </div>
-                            <label>Portfolio Value:<input type="number" class="form-control" ng-model="data.portfolio.initial"></label>
+                            <label>Non-Retirement Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.regular"></label>
+                            <label>Roth Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.roth"></label>
+                            <label>Pre-Tax Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.preTax"></label>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     Initial Assets
@@ -1577,7 +1579,11 @@
                         successRate: 95
                     },
                     portfolio: {
-                        initial: 1000000,
+                        initial: {
+                            preTax: 100000,
+                            roth: 200000,
+                            regular: 1000000
+                        },
                         percentEquities: 100,
                         percentBonds: 0,
                         percentGold: 0,

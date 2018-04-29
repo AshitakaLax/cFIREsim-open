@@ -195,7 +195,9 @@ var Simulation = {
 		}
 
 		if(form.investigate.type == 'none'){
-	        for (var i = 0; i < this.sim.length; i++) {
+            // i = which similuation (aka, defines the start year)
+            // j = which year in the simulation
+            for (var i = 0; i < this.sim.length; i++) {
 	            for (var j = 0; j < this.sim[i].length; j++) {
 	                this.calcStartPortfolio(form, i, j); //Return Starting portfolio value to kick off yearly simulation cycles
 	                this.calcSumOfAdjustments(form, i, j);
