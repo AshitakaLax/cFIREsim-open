@@ -223,6 +223,77 @@
                             <!-- cFIREsim Open -->
                         </div>
                     </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            Assumptions
+                        </div>
+                        <div class="panel-body">
+                            <label>Standard Deduction:<input type="text" class="form-control toot" ng-model="data.taxes.standardDeduction" id="standardDeduction"></label>
+                            <div>
+                                <label>Income Tax Rate Brackets</label>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            Starting Income
+                                        </th>
+                                        <th>
+                                            Tax Rate
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="bracket in data.taxes.income">
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="bracket.start">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="bracket.rate">
+                                        </td>
+                                        <td>
+                                            <input type="button" ng-click="removeObject($index, data.taxes.income)" value="Delete"/>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <input type="button" ng-click="addObject(data.taxes.income)" value="Add Income Tax Bracket"/>
+                            </div>
+                            <div>
+                                <label>Capital Gains & Dividends Tax Brackets</label>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            Starting Income
+                                        </th>
+                                        <th>
+                                            Tax Rate
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="bracket in data.taxes.capitalGains">
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="bracket.start">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="bracket.rate">
+                                        </td>
+                                        <td>
+                                            <input type="button" ng-click="removeObject($index, data.taxes.capitalGains)" value="Delete"/>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <input type="button" ng-click="addObject(data.taxes.capitalGains)" value="Add Capital Gains Tax Bracket"/>
+                            </div>
+                            <!-- cFIREsim Open -->
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="panel panel-primary">
@@ -1476,6 +1547,24 @@
                 $scope.data = {
                     retirementStartYear: 2016,
                     retirementEndYear: 2045,
+                    taxes: {
+                        standardDeduction: 24000,
+                        income: [
+                            { start: 0, rate: 0.10 },
+                            { start: 19050, rate: 0.12 },
+                            { start: 77400, rate: 0.22 },
+                            { start: 165000, rate: 0.24 },
+                            { start: 315000, rate: 0.32 },
+                            { start: 400000, rate: 0.35 },
+                            { start: 600000, rate: 0.37 }
+                        ],
+                        capitalGains: [
+                            { start: 0, rate: 0.0 },
+                            { start: 38600, rate: 0.15 },
+                            { start: 250000, rate: 0.188 }, // 3.8% investment tax over $250,000
+                            { start: 479000, rate: 0.238 }
+                        ]
+                    },
                     data: {
                         method: "historicalAll",
                         start: 1900,
@@ -1489,8 +1578,8 @@
                     },
                     portfolio: {
                         initial: 1000000,
-                        percentEquities: 75,
-                        percentBonds: 25,
+                        percentEquities: 100,
+                        percentBonds: 0,
                         percentGold: 0,
                         percentCash: 0,
                         percentFees: 0.18,
