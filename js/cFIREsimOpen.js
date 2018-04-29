@@ -279,12 +279,29 @@ var Simulation = {
         return 1 + ((endCPI - startCPI) / startCPI);
     },
     calcStartPortfolio: function(form, i, j) {
+        var copyFrom;
         if (j > 0) {
-            this.sim[i][j].portfolio.start = this.roundTwoDecimals(this.sim[i][(j - 1)].portfolio.end);
+            copyFrom = this.sim[i][(j - 1)].portfolio.endParts;
         } else {
-            this.sim[i][j].portfolio.start = this.roundTwoDecimals(form.portfolio.initial);
+            copyFrom = form.portfolio.initial;
         }
-        this.sim[i][j].portfolio.infAdjStart = this.roundTwoDecimals(this.sim[i][j].portfolio.start / this.sim[i][j].cumulativeInflation);
+        var parts = {
+            regular: this.roundTwoDecimals(copyFrom.regular),
+            preTax: this.roundTwoDecimals(copyFrom.preTax),
+            roth: this.roundTwoDecimals(copyFrom.roth)
+        };
+        this.sim[i][j].portfolio.startParts = parts;
+        this.sim[i][j].portfolio.start = parts.regular + parts.roth + parts.preTax;
+
+        var adjustedParts = {
+            regular: this.roundTwoDecimals(parts.regular / this.sim[i][j].cumulativeInflation),
+            preTax: this.roundTwoDecimals(parts.preTax / this.sim[i][j].cumulativeInflation),
+            roth: this.roundTwoDecimals(parts.roth / this.sim[i][j].cumulativeInflation)
+        };
+
+        this.sim[i][j].portfolio.infAdjStartParts = adjustedParts;
+        this.sim[i][j].portfolio.infAdjStart = adjustedParts.regular + adjustedParts.roth + adjustedParts.preTax;
+        this.roundTwoDecimals();
     },
     calcSpending: function(form, i, j) {
         var spending;
@@ -355,10 +372,51 @@ var Simulation = {
     	}
     	return ret;
     },
+    sumParts: function(parts) {
+        return parts.regular + parts.roth + parts.preTax;
+    },
     calcMarketGains: function(form, i, j) {
-        var portfolio = this.sim[i][j].portfolio.start;
+
         var sumOfAdjustments = this.sim[i][j].sumOfAdjustments; //Sum of all portfolio adjustments for this given year. SS/Pensions/Extra Income/Extra Spending.
-        portfolio = this.roundTwoDecimals(portfolio - this.sim[i][j].spending + sumOfAdjustments); //Take out spending and portfolio adjustments before calculating asset allocation. This simulates taking your spending out at the beginning of a year.
+        var netSpend = this.sim[i][j].spending - sumOfAdjustments; // the amount which needs to be used from the portfolio.
+
+        var taxesIncome = {
+            income: this.sim[i][j].taxableAdjustments,
+            capitalGains: 0
+        };
+
+        var portfolioParts = this.sim[i][j].portfolio.startParts;
+
+        // now simulate either taking the money out of the portfolio, or adding it in.
+        if (netSpend < 0) {
+            // simulate savings: first roth, then pretax, then regular
+            var toSave = -1 * netSpend;
+            var toRoth = Math.min(toSave, form.taxes.rothMax); // TODO: inflation adjust the maxes
+            toSave -= toRoth;
+            portfolioParts.roth += toRoth;
+
+            var toPreTax = Math.min(toSave, form.taxes.preTaxMax);
+            toSave -= toPreTax;
+            portfolioParts.preTax += toPreTax;
+
+            portfolioParts.regular += toSave;
+        } else {
+            // simulate spending: first regular, then pre-tax, then roth?
+            var toSpend = netSpend;
+            var fromRegular = Math.min(toSpend, portfolioParts.regular);
+            toSpend -= fromRegular;
+            portfolioParts.regular -= fromRegular;
+
+            var fromPreTax = Math.min(toSpend, portfolioParts.preTax);
+            toSpend -= fromPreTax;
+            portfolioParts.preTax -= fromPreTax;
+            taxesIncome.income += fromPreTax;
+
+            portfolioParts.roth -= toSpend;
+        }
+
+        var portfolio = this.sim[i][j].portfolio.start;
+        
 		this.sim[i][j].portfolio.start = portfolio;
         //Calculate value of each asset class based on allocation percentages
         var allocation = this.calcAllocation(form, i, j);
@@ -464,6 +522,7 @@ var Simulation = {
     calcSumOfAdjustments: function(form, i, j) { //Calculate the sum of all portfolio adjustments for a given year (pensions, extra income, extra spending, etc)
         var currentYear = new Date().getFullYear();
         var socialSecurityAndPensionAdjustments = 0;
+        var taxableAdjustments = 0;
         var sumOfAdjustments = 0;
         //Evaluate ExtraIncome given cycle i, year j
         //Social Security - always adjusted by CPI
@@ -482,15 +541,20 @@ var Simulation = {
         }
 
         sumOfAdjustments += socialSecurityAndPensionAdjustments;
+        taxableAdjustments = socialSecurityAndPensionAdjustments;
         //Extra Savings
         for (var k = 0; k < form.extraIncome.extraSavings.length; k++) {
             if (form.extraIncome.extraSavings[k].recurring == true) {
                 if ((j >= (form.extraIncome.extraSavings[k].startYear - currentYear)) && (j <= (form.extraIncome.extraSavings[k].endYear - currentYear))) {
-                    sumOfAdjustments += this.calcAdjustmentVal(form.extraIncome.extraSavings[k], i, j);
+                    var v = this.calcAdjustmentVal(form.extraIncome.extraSavings[k], i, j);
+                    sumOfAdjustments += v;
+                    taxableAdjustments += v;
                 }
             } else if (form.extraIncome.extraSavings[k].recurring == false) {
                 if (j == (form.extraIncome.extraSavings[k].startYear - currentYear)) {
-                    sumOfAdjustments += this.calcAdjustmentVal(form.extraIncome.extraSavings[k], i, j);
+                    var v = this.calcAdjustmentVal(form.extraIncome.extraSavings[k], i, j);
+                    sumOfAdjustments += v;
+                    taxableAdjustments += v;
                 }
             }
         }
@@ -511,6 +575,7 @@ var Simulation = {
         //Add sumOfAdjustments to sim container and return value.
         this.sim[i][j].socialSecurityAndPensionAdjustments = socialSecurityAndPensionAdjustments;
         this.sim[i][j].sumOfAdjustments = sumOfAdjustments;
+        this.sim[i][j].taxableAdjustments = taxableAdjustments;
         return sumOfAdjustments;
     },
     calcAdjustmentVal: function(adj, i, j) {

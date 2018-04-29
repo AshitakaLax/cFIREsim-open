@@ -229,67 +229,69 @@
                         </div>
                         <div class="panel-body">
                             <label>Standard Deduction:<input type="text" class="form-control toot" ng-model="data.taxes.standardDeduction" id="standardDeduction"></label>
+                            <label>Roth Maximum Contribution:<input type="text" class="form-control toot" ng-model="data.taxes.rothMax" id="rothMax"></label>
+                            <label>Pre Tax Maximum Contribution:<input type="text" class="form-control toot" ng-model="data.taxes.preTaxMax" id="preTaxMax"></label>
                             <div>
                                 <label>Income Tax Rate Brackets</label>
                                 <table class="table">
                                     <thead>
-                                    <tr>
-                                        <th>
-                                            Starting Income
-                                        </th>
-                                        <th>
-                                            Tax Rate
-                                        </th>
-                                        <th>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th>
+                                                Starting Income
+                                            </th>
+                                            <th>
+                                                Tax Rate
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="bracket in data.taxes.income">
-                                        <td>
-                                            <input type="text" class="form-control" ng-model="bracket.start">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" ng-model="bracket.rate">
-                                        </td>
-                                        <td>
-                                            <input type="button" ng-click="removeObject($index, data.taxes.income)" value="Delete"/>
-                                        </td>
-                                    </tr>
+                                        <tr ng-repeat="bracket in data.taxes.income">
+                                            <td>
+                                                <input type="text" class="form-control" ng-model="bracket.start">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" ng-model="bracket.rate">
+                                            </td>
+                                            <td>
+                                                <input type="button" ng-click="removeObject($index, data.taxes.income)" value="Delete" />
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                                <input type="button" ng-click="addObject(data.taxes.income)" value="Add Income Tax Bracket"/>
+                                <input type="button" ng-click="addObject(data.taxes.income)" value="Add Income Tax Bracket" />
                             </div>
                             <div>
                                 <label>Capital Gains & Dividends Tax Brackets</label>
                                 <table class="table">
                                     <thead>
-                                    <tr>
-                                        <th>
-                                            Starting Income
-                                        </th>
-                                        <th>
-                                            Tax Rate
-                                        </th>
-                                        <th>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th>
+                                                Starting Income
+                                            </th>
+                                            <th>
+                                                Tax Rate
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="bracket in data.taxes.capitalGains">
-                                        <td>
-                                            <input type="text" class="form-control" ng-model="bracket.start">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" ng-model="bracket.rate">
-                                        </td>
-                                        <td>
-                                            <input type="button" ng-click="removeObject($index, data.taxes.capitalGains)" value="Delete"/>
-                                        </td>
-                                    </tr>
+                                        <tr ng-repeat="bracket in data.taxes.capitalGains">
+                                            <td>
+                                                <input type="text" class="form-control" ng-model="bracket.start">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" ng-model="bracket.rate">
+                                            </td>
+                                            <td>
+                                                <input type="button" ng-click="removeObject($index, data.taxes.capitalGains)" value="Delete" />
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                                <input type="button" ng-click="addObject(data.taxes.capitalGains)" value="Add Capital Gains Tax Bracket"/>
+                                <input type="button" ng-click="addObject(data.taxes.capitalGains)" value="Add Capital Gains Tax Bracket" />
                             </div>
                             <!-- cFIREsim Open -->
                         </div>
@@ -1551,6 +1553,8 @@
                     retirementEndYear: 2045,
                     taxes: {
                         standardDeduction: 24000,
+                        rothMax: 18000 + 11000 + 20000, // 401K + roth IRA + post-tax rollover
+                        preTaxMax: 9000,
                         income: [
                             { start: 0, rate: 0.10 },
                             { start: 19050, rate: 0.12 },
