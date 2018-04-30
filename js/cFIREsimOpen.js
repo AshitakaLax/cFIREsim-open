@@ -431,6 +431,7 @@ var Simulation = {
 
         // loop through the different taxable parts
         var types = [{ name: "regular" }, { name: "roth" }, { name: "preTax" }];
+        var endParts = {};
         for (var x = 0; x < types.length; x++) {
             var type = types[x];
             var partValue = portfolioParts[type.name];
@@ -440,7 +441,8 @@ var Simulation = {
                 equities: { start: allocation.equities * partValue },
                 bonds: { start: allocation.bonds * partValue },
                 gold: { start: allocation.gold * partValue },
-                cash: { start: allocation.cash * partValue }
+                cash: { start: allocation.cash * partValue },
+                dividends: {}
             };
 
             //Calculate growth
@@ -506,7 +508,14 @@ var Simulation = {
             this.sim[i][j].gold.end += this.roundTwoDecimals(type.values.gold.start + type.values.gold.growth);
             this.sim[i][j].cash.growth += this.roundTwoDecimals(type.values.cash.growth);
             this.sim[i][j].cash.end += this.roundTwoDecimals(type.values.cash.start + type.values.cash.growth);
+
+            endParts[type.name] = type.values.equities.end +
+                type.values.bonds.end +
+                type.values.gold.end +
+                type.values.cash.end;
         }
+
+        this.sim[i][j].portfolio.endParts = endParts;
     },
     calcEndPortfolio: function(form, i, j) {
         if (form.portfolio.rebalanceAnnually == true) {
