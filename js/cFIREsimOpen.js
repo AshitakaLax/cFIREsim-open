@@ -515,7 +515,102 @@ var Simulation = {
                 type.values.cash.end;
         }
 
+        this.payTaxes(form, endParts, taxesIncome);
+
         this.sim[i][j].portfolio.endParts = endParts;
+    },
+    payTaxes: function(
+        form,
+        endParts /* {regular: xxx, roth: yyy, preTax: zzz}*/,
+        taxesIncome /*{income: xxx, capitalGains: yyy}*/) {
+        
+        //first, remove standard deduction
+        var deductionRemaining = form.taxes.standardDeduction;
+        var used = Math.min(deductionRemaining, taxesIncome.income);
+        taxesIncome.income -= used;
+        deductionRemaining -= used;
+        taxesIncome.capitalGains = Math.max(0, taxesIncome.capitalGains - deductionRemaining);
+
+        var taxesOwed = 0;
+        //now, pay taxes on income
+        var incomeBrackets = form.taxes.income; // {start: x, rate: y}
+        taxesOwed += this.calcBracketedTaxes(incomeBrackets, taxesIncome.income, 0);
+
+        //finally, pay taxes on gains
+        var gainsBrackets = form.taxes.capitalGains; // {start: x, rate: y}
+        taxesOwed += this.calcBracketedTaxes(gainsBrackets, taxesIncome.capitalGains, taxesIncome.income);
+
+        //pay from regular, then pretax, then roth
+        var fromRegular = Math.min(endParts.regular, taxesOwed);
+        taxesOwed -= fromRegular;
+        endParts.regular -= fromRegular;
+
+        var fromPreTax = this.calcPayingTaxesFromPreTax(
+            incomeBrackets,
+            endParts.preTax,
+            taxesOwed,
+            // technically the base of the gains above should reflect this change, but that is too complicated, so this is close enough.
+            taxesIncome.income + taxesIncome.capitalGains);
+        taxesOwed -= fromPreTax.taxesResolved;
+        endParts.preTax -= fromPreTax.toWithdraw;
+
+        endParts.roth -= taxesOwed;
+    },
+    calcBracketedTaxes: function(brackets, income, base) {
+        var toPay = 0;
+        income += base;
+        for (var x = 0; x < brackets.length; x++) {
+            var min = brackets[x].start;
+            var max = Number.MAX_SAFE_INTEGER;
+            if (brackets.length > x + 1) {
+                max = brackets[x + 1].start;
+            }
+            if (max < base) continue;
+
+            var amountWithinBracket = Math.min(max, income) - Math.max(min, base);
+            toPay += amountWithinBracket * brackets[x].rate;
+            if (max > income) break;
+        }
+        return toPay;
+    },
+    /*
+     * calculates how much to subtract from a pretax account to pay taxes.  this is complicated
+     * because using pretax money is a taxable event, so we incur more taxes as we withdraw to pay taxes.
+     */
+    calcPayingTaxesFromPreTax: function (brackets, amountInPreTax, leftToPay, base) {
+        var ret = { toWithdraw: 0, taxesResolved: 0};
+        for (var x = 0; x < brackets.length; x++) {
+            var min = brackets[x].start;
+            var max = Number.MAX_SAFE_INTEGER;
+            if (brackets.length > x + 1) {
+                max = brackets[x + 1].start;
+            }
+            if (max < base) continue;
+            var rate = brackets[x].rate;
+
+            var amountWithinBracket = max - Math.max(min, base);
+            // example, 30K within a 0.2 tax bracket.  out of 30K, 6K will go to taxes.
+            // so if I have 20K to pay, I want to use 20K/0.8 25K.
+            // if I have 40K to pay, I use all 30K, which resolves 24K of the 30K, and move on to next bracket
+
+            if (amountWithinBracket * (1 - rate) > leftToPay) {
+                // this bracket can fulfill the remaining tax needs
+                var idealWithdrawl = leftToPay / (1 - rate);
+                var actualWithdrawl = Math.min(idealWithdrawl, amountInPreTax);
+                ret.toWithdraw += actualWithdrawl;
+                amountInPreTax -= actualWithdrawl;
+                ret.taxesResolved += actualWithdrawl * (1 - rate);
+                break;
+            } else {
+                // bracket isn't big enough to fulfil the request
+                var idealWithdrawl2 = amountWithinBracket;
+                var actualWithdrawl2 = Math.min(idealWithdrawl2, amountInPreTax);
+                ret.toWithdraw += actualWithdrawl2;
+                amountInPreTax -= actualWithdrawl2;
+                ret.taxesResolved += actualWithdrawl2 * (1 - rate);
+            }
+        }
+        return ret;
     },
     calcEndPortfolio: function(form, i, j) {
         if (form.portfolio.rebalanceAnnually == true) {
