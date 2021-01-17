@@ -3,9 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A Crowdsourced Financial Independence and Early Retirement Simulator and Calculator. Uses historic stock data to model your retirement and give you a success rate based on all of the possible periods of time in the stock market (good and bad).">
     <title>Crowdsourced Financial Independence and Early Retirement Simulator/Calculator</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#428BCA" />
     <style>
         .dygraph-axis-label-y {
             padding-right: 10px;
@@ -94,25 +96,101 @@
     <script type="text/javascript" src="js/dygraph-combined.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
-    <!-- Dependencies for cFIREsim tour -->
-    <script src="js/bootstrap-tour.min.js"></script>
-    <!-- End Tour dependencies -->
+        /**
+        * Reset button styles
+        * It takes some work to achieve a “blank slate” look.
+        */
+        button {
+        padding: 0;
+        border: none;
+        font: inherit;
+        color: inherit;
+        background-color: transparent;
+        /* show a hand cursor on hover; some argue that we
+        should keep the default arrow cursor for buttons */
+        cursor: pointer;
+        }
 
-    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/r/bs/dt-1.10.8/datatables.min.js"></script>
-    <script type="text/javascript" src="js/accounting.min.js"></script>
+        /**
+        * Button component
+        */
+        input[type=button], .custom-file-upload{
+        /* default for <button>, but needed for <a> */
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+        font-size: 0.8rem;
 
-    <script type="text/javascript" src="js/cFIREsimOpen.js"></script>
-    <script type="text/javascript" src="js/formData-stub.js"></script>
-    <script type="text/javascript" src="js/marketData.js"></script>
-    <script type="text/javascript" src="js/spendingModule.js"></script>
-    <script type="text/javascript" src="js/statsModule.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
+        /* create a small space when buttons wrap on 2 lines */
+        margin: 2px 0;
+
+        /* invisible border (will be colored on hover/focus) */
+        border: solid 1px currentColor;  /*transparent;*/
+        border-radius: 4px;
+
+        /* button size comes from text + padding, avoid height */
+        padding: 0.5em 1em;
+
+        /* make sure colors have enough contrast! */
+        color: #666;
+        background-color: #FFFFFF;
+        }
+
+        /* old-school "down" effect on clic + color tweak */
+        input[type=button]:active, .custom-file-upload:active {
+        transform: translateY(1px);
+        filter: saturate(150%);
+        }
+
+        /* inverse colors on hover */
+        input[type=button]:hover, .custom-file-upload:hover {
+        color: #FFFFFF;
+        border-color: transparent;
+        background-color: #999;
+        }
+
+        /* gray out disabled buttons*/
+        input[type=button]:disabled{
+        color: #666;
+        background-color: #ccc;
+        border-color: currentColor
+        }
+
+        /* Firefox: remove the inner border shown on focus */
+        input[type=button]::-moz-focus-inner {
+        border: none;
+        }
+
+        /* make sure we have a visible focus ring */
+        input[type=button]:focus, .custom-file-upload:focus {
+        outline: none;
+        box-shadow: 0 0 0 1px #eb989b,
+            0 0 0 1px #eb989b;
+        border-color: #ec1d24;
+        }
+
+        /* hide focus style if not from keyboard navigation */
+        .js-focus-visible input[type=button]:focus:not(.focus-visible),
+        .js-focus-visible .custom-file-upload:focus:not(.focus-visible) {
+        box-shadow: none;
+        }
+
+        input.highlight {
+        color: #ec1d24;
+        }
+
+        input.highlight:hover {
+        background-color: #ec1d24;
+        }
+
+        input[type="file"]      {
+            display: none;
+        }
+
+    </style>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-tour.min.css" rel="stylesheet"> <!-- Dependency for cFIREsim tour -->
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/dt-1.10.8/datatables.min.css" />
 </head>
@@ -135,10 +213,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><button type="button" class="btn btn-default navbar-btn" id="saveSimBtn">Save Simulation Inputs</button></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Load Saved Sim <span class="caret"></span></a>
-                        <ul class="dropdown-menu" id="savedSimsDropdown"></ul>
-                    </li>;
+                    <li><button type="button" class="btn btn-default navbar-btn" id="loadSimBtn">Load Saved Sim</button></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -151,16 +226,6 @@
                             <a data-toggle="modal" href="#donateModal" class="btn btn-default">Donate/Support</a>
                         </p>
                     </li>
-                    <li>
-                        <p class="navbar-btn">
-                            <a href="http://www.cfiresim.com/phpBB3/index.php" class="btn btn-default">cFIREsim Forums</a>
-                        </p>
-                    </li>
-                    <!--<li>
-                     <p class="navbar-btn">
-                      <a data-toggle="modal" href="#" class="btn btn-default" id="tutorialBtn">Tutorial</a>
-                     </p>
-                    </li>-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blogs/Forums <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -207,19 +272,49 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            Getting Started
+                        </div>
+                        <div class="panel-body">
+                            <h4>Welcome to cFIREsim!</h4>
+                            <p>cFIREsim is a simulator which tells you if you're ready for FIRE. It uses historical market data from 1871 to present to calculate how your portfolio would have fared throughout history. If the market does no worse than the great depression, 1970's stagflation, or the dotcom bust, will your money last in retirement?</p> 
+                            <p>Enter a few simple inputs to find out!</p>
+                                <ul>
+                                    <li><b>Retirement Year:</b> When will you start withdrawing money from your retirement investments?</li>
+                                    <li><b>Retirement End Year:</b> How long will you live?</li>
+                                    <li><b>Portfolio Amount:</b> How much do you own currently? </li>
+                                    <li><b>Yearly Spending:</b> How much do you expect to withdraw every year?</li>
+                                </ul>
+                            </p>
+                            <p>Hit the "Run Simulation" button, and enjoy your personalized output chart and graph!</p>
+                            <p>Pay particular attention to your "Success Rate". This tells you how many simulations your portfolio survived, versus how many times it ran out.</p> 
+                            <p>Ready for more? cFIREsim can determine your portfolio success based on 80 individual variables, multiple types of inflation, multiple types of market returns, and graphically show you the results. Look for help topics along the way to learn more.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            Basics
+                            Timeframe
                         </div>
                         <div class="panel-body">
                             <div class="alert alert-danger" role="alert" id="yearsError" style="display:none">
                                 <span class="sr-only">Error:</span>
-                                Retirement Start must be >= Current Year. Retirement Start must be before Retirement End.
+                                Retirement Start must be >= Simulation Start. Retirement Start must be before Retirement End.
                             </div>
-                            <label>Retirement Year:<input type="text" class="form-control toot" ng-model="data.retirementStartYear" id="retirementStartYear"></label>
-                            <label>Retirement End Year:<input type="text" class="form-control" ng-model="data.retirementEndYear" id="retirementEndYear"></label>
+														<label>Simulation Start Year:<input type="text" class="form-control toot" ng-model="data.simulationStartYear" id="simulationStartYear"></label>
+                            <label data-toggle="tooltip" data-placement="bottom" title="The year in which you begin withdrawing money from retirement investments. This can be the current year, or any year in the future.">Retirement Year:<input type="text" class="form-control toot" ng-model="data.retirementStartYear" id="retirementStartYear"></label>
+                            <label data-toggle="tooltip" data-placement="bottom" title="This is the end year for the simulation. Set this to be in line with your life expectancy estiamtes.">Retirement End Year:<input type="text" class="form-control" ng-model="data.retirementEndYear" id="retirementEndYear"></label>
+                            <p>Pre-retirement length = {{ data.retirementStartYear - data.simulationStartYear }} years.</p>
+                            <p>Retirement length = {{ data.retirementEndYear - data.retirementStartYear }} years.</p>
+                            <p>Total simulation length = {{ data.retirementEndYear - data.simulationStartYear }} years.</p>
                             <!-- cFIREsim Open -->
                         </div>
                     </div>
@@ -304,11 +399,23 @@
                         </div>
                         <div class="alert alert-danger" role="alert" id="dataError" style="display:none">
                             <span class="sr-only">Error:</span>
-                            Start Year must be >= 1871. Start Year must be less than End Year. End Year must be less than current year. Total span of years must be > simulation period.
+                            Start Year must be &gt;= 1871. Start Year must be less than End Year. End Year must be less than current year. Total span of years must be > simulation period.
                         </div>
                         <div class="alert alert-danger" role="alert" id="dataRateError" style="display:none">
                             <span class="sr-only">Error:</span>
-                            Market Growth must be a positive integer.
+                            Market Growth must be a positive number.
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="dataSingleYearError" style="display:none">
+                            <span class="sr-only">Error:</span>
+                            Start Year must be &gt;= 1871 and early enough to have enough data available for the simulation length.
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="dataCapeError" style="display:none">
+                            <span class="sr-only">Error:</span>
+                            CAPE limits must be positive numbers and minimum CAPE must be less than maximum CAPE.
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="investigateError" style="display:none">
+                            <span class="sr-only">Error:</span>
+                            Chance of suscess must be &gt;0 and &lt;=100.
                         </div>
                         <div class="panel-body">
                             <label>
@@ -350,6 +457,20 @@
                                     </div>
                                 </label>
                             </div>
+                            <div id="historicalCapeOptions" class="dataOptions" style="display:none">
+                                <label>
+                                    Minimum Starting Cape:
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" ng-model="data.data.mincape">
+                                    </div>
+                                </label>
+                                <label>
+                                    Maximum Starting Cape:
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" ng-model="data.data.maxcape">
+                                    </div>
+                                </label>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>
@@ -371,7 +492,7 @@
                                 </label>
                             </div>
                             <br><a data-toggle="modal" href="#outputModal" class="btn btn-success btn-lg runSim" ng-click="runSimulation()">Run Simulation</a>
-
+                            <a data-toggle="modal" href="#outputModal" class="btn btn-success btn-lg runSim" style="display:none" id="showPreviousSimulations">Show Previous Simulations</a>
                         </div>
                     </div>
                 </div>
@@ -385,16 +506,31 @@
                         <div class="panel-body">
                             <div class="alert alert-danger" role="alert" id="portfolioError" style="display:none">
                                 <span class="sr-only">Error:</span>
-                                Portfolio must be a positive integer.
+                                Portfolio must be a positive number.
                             </div>
-                            <label>Non-Retirement Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.regular"></label>
-                            <label>Roth Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.roth"></label>
-                            <label>Pre-Tax Investments:<input type="number" class="form-control" ng-model="data.portfolio.initial.preTax"></label>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <label data-toggle="tooltip" data-placement="bottom" title="All investable assets not in a tax advantaged account.  Do not include pensions, social security, house equity or other income streams in this number.">Non-Retirement Investments:
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="number" class="form-control" ng-model="data.portfolio.initial.regular">
+                                </div>
+                            </label>
+                            <label data-toggle="tooltip" data-placement="bottom" title="Investments in Roth accounts (grows tax free, withdrawal tax free).  Include Roth IRA, Roth 401K, and HSA.">Roth Investments:
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="number" class="form-control" ng-model="data.portfolio.initial.roth">
+                                </div>
+                            </label>
+                            <label data-toggle="tooltip" data-placement="bottom" title="Investments in pre-tax accounts (grows tax free, withdrawals taxed as income).  Include Traditional IRA, 401K.">Pre-Tax Investments:
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="number" class="form-control" ng-model="data.portfolio.initial.preTax">
+                                </div>
+                            </label>
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" data-toggle="tooltip" data-placement="top" title="This is the asset allocation of your portfolio as of today.">
                                     Initial Assets
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" >
                                     <div class="row">
                                         <div class="alert alert-danger" role="alert" id="allocationError" style="display:none">
                                             <span class="sr-only">Error:</span>
@@ -441,7 +577,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>
+                                            <label data-toggle="tooltip" data-placement="bottom" title="The maintenance/administrative fees that your portfolio requires. This number is calculated against your entire portfolio each year, so please use an average number across all accounts.">
                                                 Fees/Drag:
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" ng-model="data.portfolio.percentFees">
@@ -450,7 +586,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-6">
-                                            <label>
+                                            <label data-toggle="tooltip" data-placement="bottom" title="Since there is no reliable historical data on cash investments (that I can find), the Growth of Cash input is for the user to determine how much growth over time that your cash allocation receives.">
                                                 Growth of Cash:
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" ng-model="data.portfolio.growthOfCash">
@@ -465,22 +601,16 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>
-                                            Rebalance Annually:
-                                            <select class="form-control"
+                                            Annual Rebalancing Strategy:
+                                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                                <select class="form-control"
                                                     ng-model="data.portfolio.rebalanceAnnually"
                                                     ng-change="refreshRebalanceAnnuallyOptions()"
                                                     ng-options="rebalanceAnnuallyOptions.value as rebalanceAnnuallyOptions.text for rebalanceAnnuallyOptions in rebalanceAnnuallyOptionsTypes"></select>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>
-                                            Keep Allocation Constant:
-                                            <select class="form-control"
-                                                    ng-model="data.portfolio.constantAllocation"
-                                                    ng-change="refreshConstantAllocationOptions()"
-                                                    ng-options="constantAllocationOptions.value as constantAllocationOptions.text for constantAllocationOptions in constantAllocationOptionsTypes"></select>
+                                                <button type="button" class="btn btn-outline-secondary btn-help" data-href="/help/rebalance.html" data-title="Annual Rebalancing Strategy">
+                                                    <img src="image/help.svg"/>
+                                                </button>
+                                            </div>        
                                         </label>
                                     </div>
                                 </div>
@@ -496,7 +626,7 @@
                                     </div>
                                     <div class="alert alert-danger" role="alert" id="targetAllocationYearsError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Start Year must be greater than current year. End Year must be after Start Year.
+                                        Start Year must be greater than simulation start year. End Year must be after Start Year.
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -563,18 +693,25 @@
                         </div>
                         <div class="alert alert-danger" role="alert" id="initialSpendingError" style="display:none">
                             <span class="sr-only">Error:</span>
-                            Initial Spending amount must be a positive integer.
+                            Initial Spending amount must be a positive number.
                         </div>
                         <div class="panel-body">
-                            <label>
-                                Spending Plan:
-                                <select class="form-control"
-                                        ng-model="data.spending.method"
-                                        ng-change="refreshSpendingForm()"
-                                        ng-options="spendingPlan.value as spendingPlan.text for spendingPlan in spendingPlanTypes"></select>
-                            </label>
-                            <div id="yearlySpendingOptions" class="spendingOptions">
+                            <div>
                                 <label>
+                                    Withdrawal Strategy:
+                                    <div style="display: flex; flex-direction: row; align-items: center;">
+                                        <select class="form-control"
+                                                ng-model="data.spending.method"
+                                                ng-change="refreshSpendingForm()"
+                                                ng-options="spendingPlan.value as spendingPlan.text for spendingPlan in spendingPlanTypes"></select>
+                                        <button type="button" class="btn btn-outline-secondary btn-help" data-href="/help/withdrawal.html" data-title="Withdrawal Strategy">
+                                            <img src="image/help.svg"/>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="yearlySpendingOptions" class="spendingOptions">
+                                <label data-toggle="tooltip" data-placement="bottom" title="Your yearly default expenses that will be subtracted from your portfolio.">
                                     Initial Yearly Spending:
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
@@ -593,7 +730,7 @@
                                     </div>
                                 </label>
                                 <div id="percentageOfPortfolioLimits">
-                                    <label>
+                                    <label data-toggle="tooltip" data-placement="bottom" title="Prevent the simulation from going to an unreasonable level of spending, by setting the mininum that you want to allow during retirement.">
                                         Floor Spending:
                                         <div class="input-group">
                                             <select class="form-control"
@@ -614,7 +751,7 @@
                                         </div>
                                     </label>
                                     <br>
-                                    <label>
+                                    <label data-toggle="tooltip" data-placement="bottom" title="Prevent the simulation from going to an unreasonable level of spending, by setting the maximum that you want to allow during retirement.">
                                         Ceiling Spending:
                                         <div class="input-group">
                                             <select class="form-control"
@@ -805,7 +942,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            Extra Income/Savings
+                            Income
                         </div>
                         <div class="panel-body">
                             <div class="panel panel-default">
@@ -815,16 +952,16 @@
                                 <div class="panel-body">
                                     <div class="alert alert-danger" role="alert" id="ssError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Start Year must be >= current year. Start Year must be less than End Year.
+                                        Start Year must be &gt;= simulation start year. Start Year must be less than End Year.
                                     </div>
                                     <div class="alert alert-danger" role="alert" id="ssValueError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Amount must be a positive integer.
+                                        Amount must be a positive number.
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>
-                                                Annual:
+                                                Annual Amount:
                                                 <div class="input-group">
                                                     <span class="input-group-addon">$</span>
                                                     <input type="text" class="form-control" ng-model="data.extraIncome.socialSecurity.val">
@@ -841,7 +978,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>
-                                                Annual Spousal:
+                                                Annual Spousal Amount:
                                                 <div class="input-group">
                                                     <span class="input-group-addon">$</span>
                                                     <input type="text" class="form-control" ng-model="data.extraIncome.socialSecuritySpouse.val">
@@ -864,36 +1001,36 @@
                                 <div class="panel-body">
                                     <div class="alert alert-danger" role="alert" id="pensionsError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Pension Start Year must be >= the current year and must be an integer.
+                                        Pension Start Year must be &gt;= the simulation start year and must be an integer.
                                     </div>
                                     <div class="alert alert-danger" role="alert" id="pensionsValueError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Amount must be a positive integer.
+                                        Amount must be a positive number.
                                     </div>
                                     <div class="alert alert-danger" role="alert" id="pensionsRateError" style="display:none">
                                         <span class="sr-only">Error:</span>
-                                        Pension inflation rate must be a positive integer.
+                                        Pension inflation rate must be a positive number.
                                     </div>
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <th id="p_label">
                                                     Label
                                                 </th>
-                                                <th>
-                                                    Amount ($)
+                                                <th id="p_amount">
+                                                    Annual Amount
                                                 </th>
-                                                <th>
+                                                <th id="p_year">
                                                     Start Year
                                                 </th>
-                                                <th>
+                                                <th id="p_infadj">
                                                     Inflation Adjusted
                                                 </th>
-                                                <th>
+                                                <th id="p_inftyp">
                                                     Inflation Type
                                                 </th>
-                                                <th>
-                                                    Inflation %
+                                                <th id="p_infrate">
+                                                    Inflation Rate
                                                 </th>
                                                 <th>
                                                 </th>
@@ -902,40 +1039,49 @@
                                         <tbody>
                                             <tr ng-repeat="pension in data.extraIncome.pensions">
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="pension.label">
+                                                    <input type="text" class="form-control" ng-model="pension.label" aria-labelledby="p_label">
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="pension.val">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="pension.val" aria-labelledby="p_amount">
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="pension.startYear">
+                                                    <input type="text" class="form-control" ng-model="pension.startYear" aria-labelledby="p_amount">
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="pension.inflationAdjusted"
                                                             ng-options="bool for bool in boolOptions"
-                                                            ng-change="changeInflationAdjusted($index, data.extraIncome.pensions)"></select>
+                                                            ng-change="changeInflationAdjusted($index, data.extraIncome.pensions)"
+                                                            aria-labelledby="p_infadj"></select>
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="pension.inflationType"
                                                             ng-options="option.value as option.text for option in inflationTypes"
                                                             ng-change="changeInflationType($index, data.extraIncome.pensions)"
-                                                            ng-disabled="!pension.inflationAdjusted"></select>
+                                                            ng-disabled="!pension.inflationAdjusted"
+                                                            aria-labelledby="p_inftyp"></select>
                                                 </td>
                                                 <td>
-                                                    <input type="text"
+                                                    <div class="input-group">
+                                                        <input type="text"
                                                            class="form-control"
                                                            ng-model="pension.inflationRate"
-                                                           ng-disabled="pension.inflationType != 'constant' || !pension.inflationAdjusted">
+                                                           ng-disabled="pension.inflationType != 'constant' || !pension.inflationAdjusted"
+                                                           aria-labelledby="p_infrate">
+                                                        <span class="input-group-addon">%</span>
+                                                        </div>
                                                 </td>
                                                 <td>
-                                                    <input type="button" ng-click="removeObject($index, data.extraIncome.pensions)" value="Delete" />
+                                                    <button type="button" class="btn btn-default" ng-click="removeObject($index, data.extraIncome.pensions)">Delete</button>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <input type="button" ng-click="addObject(data.extraIncome.pensions)" value="Add Pension" />
+                                    <button type="button" class="btn btn-default" ng-click="addObject(data.extraIncome.pensions)" class="btn btn-default">Add Pension</button>
                                 </div>
                             </div>
                             <div class="panel panel-default">
@@ -944,11 +1090,11 @@
                                 </div>
                                 <div class="alert alert-danger" role="alert" id="extraIncomeRateError" style="display:none">
                                     <span class="sr-only">Error:</span>
-                                    Extra Income inflation rate must be a positive integer.
+                                    Extra Income inflation rate must be a positive number.
                                 </div>
                                 <div class="alert alert-danger" role="alert" id="extraIncomeValueError" style="display:none">
                                     <span class="sr-only">Error:</span>
-                                    Amount must be a positive integer.
+                                    Amount must be a positive number.
                                 </div>
                                 <div class="alert alert-danger" role="alert" id="extraIncomeError" style="display:none">
                                     <span class="sr-only">Error:</span>
@@ -958,29 +1104,29 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <th id="i_label">
                                                     Label
                                                 </th>
-                                                <th>
-                                                    Amount ($)
+                                                <th id="i_amount">
+                                                    Annual Amount
                                                 </th>
-                                                <th>
+                                                <th id="i_type">
                                                     Recurring
                                                 </th>
-                                                <th>
-                                                    Start year
+                                                <th id="i_syear">
+                                                    Start Year
                                                 </th>
-                                                <th>
+                                                <th id="i_eyear">
                                                     End Year
                                                 </th>
-                                                <th>
+                                                <th id="i_infadj">
                                                     Inflation Adjusted
                                                 </th>
-                                                <th>
+                                                <th id="i_inftyp">
                                                     Inflation Type
                                                 </th>
-                                                <th>
-                                                    Inflation %
+                                                <th id="i_infrate">
+                                                    Inflation Rate
                                                 </th>
                                                 <th>
                                                 </th>
@@ -989,52 +1135,63 @@
                                         <tbody>
                                             <tr ng-repeat="extraSaving in data.extraIncome.extraSavings">
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSaving.label">
+                                                    <input type="text" class="form-control" ng-model="extraSaving.label" aria-labelledby="i_label">
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSaving.val">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="extraSaving.val" aria-labelledby="i_amount">
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSaving.recurring"
                                                             ng-options="bool for bool in boolOptions"
-                                                            ng-change="clearEndYear($index, data.extraIncome.extraSavings)"></select>
+                                                            ng-change="clearEndYear($index, data.extraIncome.extraSavings)"
+                                                            aria-labelledby="i_type"></select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSaving.startYear">
+                                                    <input type="text" class="form-control" ng-model="extraSaving.startYear" aria-labelledby="i_syear">
                                                 </td>
                                                 <td>
                                                     <input type="text"
                                                            class="form-control"
                                                            ng-model="extraSaving.endYear"
-                                                           ng-disabled="!extraSaving.recurring">
+                                                           ng-disabled="!extraSaving.recurring"
+                                                           aria-labelledby="i_eyear">
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSaving.inflationAdjusted"
                                                             ng-options="bool for bool in boolOptions"
-                                                            ng-change="changeInflationAdjusted($index, data.extraIncome.extraSavings)"></select>
+                                                            ng-change="changeInflationAdjusted($index, data.extraIncome.extraSavings)"
+                                                            aria-labelledby="i_infadj"></select>
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSaving.inflationType"
                                                             ng-options="option.value as option.text for option in inflationTypes"
                                                             ng-change="changeInflationType($index, data.extraIncome.extraSavings)"
-                                                            ng-disabled="!extraSaving.inflationAdjusted"></select>
+                                                            ng-disabled="!extraSaving.inflationAdjusted"
+                                                            aria-labelledby="i_inftyp"></select>
                                                 </td>
                                                 <td>
+                                                    <div class="input-group">
                                                     <input type="text"
                                                            class="form-control"
                                                            ng-model="extraSaving.inflationRate"
-                                                           ng-disabled="extraSaving.inflationType != 'constant' || !extraSaving.inflationAdjusted">
+                                                           ng-disabled="extraSaving.inflationType != 'constant' || !extraSaving.inflationAdjusted"
+                                                           aria-labelledby="i_infrate">
+                                                    <span class="input-group-addon">%</span>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <input type="button" ng-click="removeObject($index, data.extraIncome.extraSavings)" value="Delete" />
+                                                    <button type="button" class="btn btn-default" ng-click="removeObject($index, data.extraIncome.extraSavings)">Delete</button>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <input type="button" ng-click="addObject(data.extraIncome.extraSavings)" value="Add Savings" />
+                                    <button type="button" class="btn btn-default" ng-click="addObject(data.extraIncome.extraSavings)" class="btn btn-default">Add Income</button>
                                 </div>
                             </div>
                         </div>
@@ -1043,52 +1200,49 @@
                 <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            Extra Spending
+                            Individual Expenses
                         </div>
                         <div class="panel-body">
                             <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    Other Spending
-                                </div>
                                 <div class="alert alert-danger" role="alert" id="extraSpendingError" style="display:none">
                                     <span class="sr-only">Error:</span>
-                                    Start Year must be >= current year. Start Year must be less than End Year.
+                                    Start Year must be &gt;= current year. Start Year must be less than End Year.
                                 </div>
                                 <div class="alert alert-danger" role="alert" id="extraSpendingValueError" style="display:none">
                                     <span class="sr-only">Error:</span>
-                                    Amount must be a positive integer.
+                                    Amount must be a positive number.
                                 </div>
                                 <div class="alert alert-danger" role="alert" id="extraSpendingRateError" style="display:none">
                                     <span class="sr-only">Error:</span>
-                                    Inflation Rate for Spending must be a positive integer.
+                                    Inflation Rate for Spending must be a positive number.
                                 </div>
                                 <div class="panel-body">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <th id="s_label">
                                                     Label
                                                 </th>
-                                                <th>
-                                                    Amount ($)
+                                                <th id="s_amount">
+                                                    Annual Amount
                                                 </th>
-                                                <th>
+                                                <th id="s_type">
                                                     Recurring
                                                 </th>
-                                                <th>
-                                                    Start year
+                                                <th id="s_syear">
+                                                    Start Year
                                                 </th>
-                                                <th>
+                                                <th id="s_eyear">
                                                     End Year
                                                 </th>
-                                                <th>
+                                                <th id="s_infadj">
                                                     Inflation Adjusted
                                                 </th>
-                                                <th>
+                                                <th id="s_inftyp">
                                                     Inflation Type
                                                 </th>
-                                                <th>
-                                                    Inflation %
+                                                <th id="s_infrate">
+                                                    Inflation Rate
                                                 </th>
                                                 <th>
                                                 </th>
@@ -1097,52 +1251,66 @@
                                         <tbody>
                                             <tr ng-repeat="extraSpending in data.extraSpending">
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSpending.label">
+                                                    <input type="text" class="form-control" ng-model="extraSpending.label" aria-labelledby="s_label">
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSpending.val">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="extraSpending.val" aria-labelledby="s_amount">
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSpending.recurring"
                                                             ng-options="bool for bool in boolOptions"
-                                                            ng-change="clearEndYear($index, data.extraSpending)"></select>
+                                                            ng-change="clearEndYear($index, data.extraSpending)"
+                                                            aria-labelledby="s_type"></select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" ng-model="extraSpending.startYear">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           ng-model="extraSpending.startYear"
+                                                           aria-labelledby="s_syear">
                                                 </td>
                                                 <td>
                                                     <input type="text"
                                                            class="form-control"
                                                            ng-model="extraSpending.endYear"
-                                                           ng-disabled="!extraSpending.recurring">
+                                                           ng-disabled="!extraSpending.recurring"
+                                                           aria-labelledby="s_eyear">
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSpending.inflationAdjusted"
                                                             ng-options="bool for bool in boolOptions"
-                                                            ng-change="changeInflationAdjusted($index, data.extraSpending)"></select>
+                                                            ng-change="changeInflationAdjusted($index, data.extraSpending)"
+                                                            aria-labelledby="s_infadj"></select>
                                                 </td>
                                                 <td>
                                                     <select class="form-control"
                                                             ng-model="extraSpending.inflationType"
                                                             ng-options="option.value as option.text for option in inflationTypes"
                                                             ng-change="changeInflationType($index, data.extraSpending)"
-                                                            ng-disabled="!extraSpending.inflationAdjusted"></select>
+                                                            ng-disabled="!extraSpending.inflationAdjusted"
+                                                            aria-labelledby="s_inftyp"></select>
                                                 </td>
                                                 <td>
-                                                    <input type="text"
-                                                           class="form-control"
-                                                           ng-model="extraSpending.inflationRate"
-                                                           ng-disabled="extraSpending.inflationType != 'constant' || !extraSpending.inflationAdjusted">
+                                                    <div class="input-group">
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            ng-model="extraSpending.inflationRate"
+                                                            ng-disabled="extraSpending.inflationType != 'constant' || !extraSpending.inflationAdjusted"
+                                                            aria-labelledby="s_infrate">
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <input type="button" ng-click="removeObject($index, data.extraSpending)" value="Delete" />
+                                                    <button type="button" class="btn btn-default" ng-click="removeObject($index, data.extraSpending)">Delete</button>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <input type="button" ng-click="addObject(data.extraSpending)" value="Add Spending" />
+                                    <button type="button" class="btn btn-default" ng-click="addObject(data.extraSpending)" class="btn btn-default">Add Expense</button>
                                 </div>
                             </div>
                         </div>
@@ -1446,7 +1614,7 @@
                                     <div id='labels10' style='background:white;width:800px;height:20px;' class='output'></div>
                                     <div id='graph10b' style='width:800px; height:400px;background:white;' class='output'></div>
                                     <div id='labels10b' style='background:white;width:800px;height:20px;' class='output'></div>
-                                    <div id='download1'></div>
+                                    <div id='download10'></div>
                                     <p>
                                         <h1>
                                             Statistics
@@ -1492,9 +1660,9 @@
                     </p>
                     <ul>
                         <li>
-                            You can log in to the <a href="https://github.com/boknows/cFIREsim-open/issues">GitHub Issues page</a> and contribute to the cFIREsim Open project by coding a feature/bugfix.
+                            You can log in to the <a href="https://github.com/alistair-marshall/cFIREsim-open/issues">GitHub Issues page</a> and contribute to the cFIREsim Open project by coding a feature/bugfix.
                         </li>
-                        <li>
+                        <!--li>
                             You can donate via Paypal to support the web hosting fees of this site.
                             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                                 <input type="hidden" name="cmd" value="_s-xclick">
@@ -1502,7 +1670,7 @@
                                 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                                 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
                             </form>
-                        </li>
+                        </li-->
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -1524,7 +1692,7 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <span class='input-group-addon'>Saved Simulation Name:</span><input type='text' size='12' class='form-control' id='simNameInput'>
-                    </div>
+                    </div><br>
                     <button type="button" class="btn btn-success" id="confirmSaveSim">Save Sim</button>
                 </div>
                 <div class="modal-footer">
@@ -1533,17 +1701,61 @@
             </div>
         </div>
     </div> <!-- End Save Sim Modal -->
+    <!-- Load Sim Modal -->
+    <div class="modal fade" id="loadSimPopup" tabindex="" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Load Simulation Inputs</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="file" clas="custom-file-upload">Select File</label>
+                        <input id="file" type="file" accept=".FIREsim"/>
+                    </div><br>
+                    <button type="button" class="btn btn-success" id="confirmLoadSim">Load Sim</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Save Sim Modal -->
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpPopup" tabindex="" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Help</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Help Modal -->
 
     <div id="saveSimSuccess" style="display:none" class="popup small">
         <p>Your simulation was successfully saved</p>
         <button type="button" class="btn btn-danger" id="closeSaveSuccess">Close</button>
     </div>
 
-    <script type="text/javascript" src="js/marketData.js"></script>
-    <script type="text/javascript" src="js/cFIREsimOpen.js"></script>
-
-</body>
-</html>
+<script type='text/javascript' src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js" defer></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/r/bs/dt-1.10.8/datatables.min.js" defer></script>
+<script type="text/javascript" src="js/accounting.min.js" defer></script>
+<script type="text/javascript" src="js/cFIREsimOpen.js"></script>
+<script type="text/javascript" src="js/marketData.js" defer></script>
+<script type="text/javascript" src="js/spendingModule.js" defer></script>
+<script type="text/javascript" src="js/statsModule.js" defer></script>
+<script type="text/javascript" src="js/validation.js" defer></script>
 <script type="text/javascript">
     angular.module('cFIREsim', [])
         .controller('simulationInputController', ['$scope',
@@ -1571,12 +1783,17 @@
                             { start: 479000, rate: 0.238 }
                         ]
                     },
+                    simulationStartYear: new Date().getFullYear(),
+                    retirementStartYear: new Date().getFullYear(),
+                    retirementEndYear: new Date().getFullYear() + 30,
                     data: {
                         method: "historicalAll",
                         start: 1900,
                         end: 1970,
                         growth: 8,
-                        singleStart: 1966
+                        singleStart: 1966,
+                        maxcape: null,
+                        mincape: null
                     },
                     investigate: {
                         type: "none",
@@ -1594,10 +1811,9 @@
                         percentCash: 0,
                         percentFees: 0.18,
                         growthOfCash: 0.25,
-                        rebalanceAnnually: true,
-                        constantAllocation: true,
-                        changeAllocationStartYear: 2025,
-                        changeAllocationEndYear: 2030,
+                        rebalanceAnnually: 1,
+                        changeAllocationStartYear: new Date().getFullYear(),
+                        changeAllocationEndYear: new Date().getFullYear()+10,
                         targetPercentEquities: 100,
                         targetPercentBonds: 0,
                         targetPercentGold: 0,
@@ -1728,6 +1944,12 @@
                     formInputs: [
                         'singleCycleOptions'
                     ]
+                }, {
+                    text: 'Historical Data - Cape Filtered',
+                    value: 'historicalCape',
+                    formInputs: [
+                        'historicalCapeOptions'
+                    ]
                 }]
                 $scope.investigateOptionTypes = [{
                     text: 'None ',
@@ -1739,22 +1961,33 @@
                     formInputs: [
                         'maxInitialSpendingOptions'
                     ]
+                },
+                {
+                    text: 'Retirement Year',
+                    value: 'retirementYear',
+                    formInputs: [
+                        'maxInitialSpendingOptions'
+                    ]
                 }]
                 $scope.rebalanceAnnuallyOptionsTypes = [{
-                    text: 'Yes',
-                    value: true
+                    text: 'None',
+                    value: 0
                 },
                 {
-                    text: 'No',
-                    value: false
-                }]
-                $scope.constantAllocationOptionsTypes = [{
-                    text: 'Yes',
-                    value: true
+                    text: 'Constant',
+                    value: 1
                 },
                 {
-                    text: 'No',
-                    value: false
+                    text: 'Glidepath',
+                    value: 2
+                },
+                {
+                    text: 'Bonds First',
+                    value: 3
+                },
+                {
+                    text: 'OmegaNot',
+                    value: 4
                 }]
                 $scope.spendingPlanTypes = [{
                     text: 'Inflation Adjusted',
@@ -1925,22 +2158,31 @@
                         $('#historicalSpecificOptions').show();
                         $('#constantGrowthOptions').hide();
                         $('#singleCycleOptions').hide();
+                        $('#historicalCapeOptions').hide();
                     } else if ($scope.data.data.method == "constant") {
                         $('#constantGrowthOptions').show();
                         $('#historicalSpecificOptions').hide();
                         $('#singleCycleOptions').hide();
+                        $('#historicalCapeOptions').hide();
                     } else if ($scope.data.data.method == "historicalAll") {
                         $('#constantGrowthOptions').hide();
                         $('#historicalSpecificOptions').hide();
                         $('#singleCycleOptions').hide();
+                        $('#historicalCapeOptions').hide();
                     } else if ($scope.data.data.method == "singleCycle") {
                         $('#singleCycleOptions').show();
                         $('#constantGrowthOptions').hide();
                         $('#historicalSpecificOptions').hide();
+                        $('#historicalCapeOptions').hide();
+                    } else if ($scope.data.data.method == "historicalCape") {
+                        $('#historicalCapeOptions').show();
+                        $('#constantGrowthOptions').hide();
+                        $('#historicalSpecificOptions').hide();
+                        $('#singleCycleOptions').hide();
                     }
                 }
                 $scope.refreshInvestigateForm = function () {
-                    if ($scope.data.investigate.type == "maxInitialSpending") {
+                    if ($scope.data.investigate.type == "maxInitialSpending" || $scope.data.investigate.type == "retirementYear") {
                         $('#maxInitialSpendingOptions').show();
                     } else {
                         $('#maxInitialSpendingOptions').hide();
@@ -1980,24 +2222,10 @@
                     // $scope.data =
                     //Load from JSON
                 }
-                // TODO: Could these 2 be turned into declarative Angular statements?
                 $scope.refreshRebalanceAnnuallyOptions = function () {
-                    if ($scope.data.portfolio.rebalanceAnnually == false) {
-                        $('select[ng-model="data.portfolio.constantAllocation"]').attr('disabled', true);
-                        $('select[ng-model="data.portfolio.constantAllocation"]').val("0");
-                    } else {
-                        $('select[ng-model="data.portfolio.constantAllocation"]').attr('disabled', false);
-                        $('select[ng-model="data.portfolio.constantAllocation"]').val("0");
-                    }
-                }
-                $scope.refreshConstantAllocationOptions = function () {
-                    if ($scope.data.portfolio.constantAllocation == false) {
-                        $('select[ng-model="data.portfolio.rebalanceAnnually"]').attr('disabled', true);
-                        $('select[ng-model="data.portfolio.rebalanceAnnually"]').val("0");
+                    if ($scope.data.portfolio.rebalanceAnnually == 2) {
                         $('#targetAssets').show();
                     } else {
-                        $('select[ng-model="data.portfolio.rebalanceAnnually"]').attr('disabled', false);
-                        $('select[ng-model="data.portfolio.rebalanceAnnually"]').val("0");
                         $('#targetAssets').hide();
                     }
                 }
@@ -2073,6 +2301,6 @@
             }
         ]);
 
-
-
 </script>
+</body>
+</html>
