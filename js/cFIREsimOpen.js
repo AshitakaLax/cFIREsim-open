@@ -1014,12 +1014,16 @@ var Simulation = {
 		var num = getRandomInt(0, results.length);
 		*/
 		var tmpStr = "";
+		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
 		for (var j = 0; j < results.length; j++) {
-			csv = csv.concat("Year,CumulativeInflation,portfolio.start,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.infAdjEnd\r\n");
+			csv = csv.concat(headers);
 			for (var i = 0; i < results[j].length; i++) {
 				csv = csv.concat(results[j][i].year + ",");
 				csv = csv.concat(results[j][i].cumulativeInflation + ",");
 				csv = csv.concat(results[j][i].portfolio.start + ",");
+				csv = csv.concat(results[j][i].portfolio.startParts.regular + ",");
+				csv = csv.concat(results[j][i].portfolio.startParts.roth + ",");
+				csv = csv.concat(results[j][i].portfolio.startParts.preTax + ",");
 				csv = csv.concat(results[j][i].portfolio.infAdjStart + ",");
 				csv = csv.concat(results[j][i].spending + ",");
 				csv = csv.concat(results[j][i].infAdjSpending + ",");
@@ -1035,6 +1039,9 @@ var Simulation = {
 				csv = csv.concat(results[j][i].cash.growth + ",");
 				csv = csv.concat(results[j][i].portfolio.fees + ",");
 				csv = csv.concat(results[j][i].portfolio.end + ",");
+				csv = csv.concat(results[j][i].portfolio.endParts.regular + ",");
+				csv = csv.concat(results[j][i].portfolio.endParts.roth + ",");
+				csv = csv.concat(results[j][i].portfolio.endParts.preTax + ",");
 				csv = csv.concat(results[j][i].portfolio.infAdjEnd + ",");
 				csv = csv.concat("\r\n");
 				if (i == results[j].length - 1) {
@@ -1042,7 +1049,7 @@ var Simulation = {
 
 				}
 			}
-			csv = csv.concat("Year,CumulativeInflation,portfolio.start,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.infAdjEnd\r\n\r\n");
+			csv = csv.concat(headers);
 
 		}
 
