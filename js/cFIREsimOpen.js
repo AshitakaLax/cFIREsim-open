@@ -422,11 +422,8 @@ var Simulation = {
     },
     calcMarketGains: function(form, i, j) {
 
-        var sumOfAdjustments =
-            this.sim[i][j]
-                .sumOfAdjustments; //Sum of all portfolio adjustments for this given year. SS/Pensions/Extra Income/Extra Spending.
-        var netSpend =
-            this.sim[i][j].spending - sumOfAdjustments; // the amount which needs to be used from the portfolio.
+        var sumOfAdjustments = this.sim[i][j].sumOfAdjustments; //Sum of all portfolio adjustments for this given year. SS/Pensions/Extra Income/Extra Spending.
+        var netSpend = this.sim[i][j].spending - sumOfAdjustments; // the amount which needs to be used from the portfolio.
 
         var taxesIncome = {
             income: this.sim[i][j].taxableAdjustments,
@@ -437,16 +434,19 @@ var Simulation = {
 
         // now simulate either taking the money out of the portfolio, or adding it in.
         if (netSpend < 0) {
-            // simulate savings: first roth, then pretax, then regular
+			// simulate savings: first roth, then pretax, then regular
             var toSave = -1 * netSpend;
-            var toRoth = Math.min(toSave, form.taxes.rothMax); // TODO: inflation adjust the maxes
-            toSave -= toRoth;
-            portfolioParts.roth += toRoth;
+			var yearsToSave = form.retirementStartYear - form.simulationStartYear;
+			if (yearsToSave > j)
+			{
+				var toRoth = Math.min(toSave, form.taxes.rothMax); // TODO: inflation adjust the maxes
+				toSave -= toRoth;
+				portfolioParts.roth += toRoth;
 
-            var toPreTax = Math.min(toSave, form.taxes.preTaxMax);
-            toSave -= toPreTax;
-            portfolioParts.preTax += toPreTax;
-
+				var toPreTax = Math.min(toSave, form.taxes.preTaxMax);
+				toSave -= toPreTax;
+				portfolioParts.preTax += toPreTax;
+			}
             portfolioParts.regular += toSave;
         } else {
             // simulate spending: first regular, then pre-tax, then roth?
@@ -460,8 +460,12 @@ var Simulation = {
             portfolioParts.preTax -= fromPreTax;
             taxesIncome.income += fromPreTax; // spending pretax money is income
 
-            portfolioParts.roth -= toSpend;
-
+			portfolioParts.roth -= toSpend;
+			if (portfolioParts.roth < 0)
+			{
+				portfolioParts.regular += portfolioParts.roth;
+				portfolioParts.roth = 0;
+			}
             //TODO: account for required minimum distributions
         }
 
@@ -585,7 +589,12 @@ var Simulation = {
         taxesOwed -= fromPreTax.taxesResolved;
         endParts.preTax -= fromPreTax.toWithdraw;
 
-        endParts.roth -= taxesOwed;
+		endParts.roth -= taxesOwed;
+		if (endParts.roth < 0) // going into negatives
+		{
+			endParts.regular += endParts.roth;
+			endParts.roth = 0;
+		}
     },
     calcBracketedTaxes: function(brackets, income, base) {
         var toPay = 0;
@@ -671,7 +680,8 @@ var Simulation = {
             var cycleFailure = false;
             for (var j = 0; j < results[i].length; j++) {
                 if (results[i][j].portfolio.end < 0) {
-                    cycleFailure = true;
+					cycleFailure = true;
+					break;
                 }
             }
             if (cycleFailure == true) {
@@ -1009,8 +1019,9 @@ var Simulation = {
 		});
 
 		var tmpStr = "";
-		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
+		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,infAdjPortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
 		for (var j = 0; j < results.length; j++) {
+			csv = csv.concat("Start=" + results[j][0].year + "\r\n");
 			csv = csv.concat(headers);
 			for (var i = 0; i < results[j].length; i++) {
 				csv = csv.concat(results[j][i].year + ",");
@@ -1023,6 +1034,7 @@ var Simulation = {
 				csv = csv.concat(results[j][i].spending + ",");
 				csv = csv.concat(results[j][i].infAdjSpending + ",");
 				csv = csv.concat(results[j][i].sumOfAdjustments + ",");
+				csv = csv.concat((results[j][i].sumOfAdjustments / results[j][i].cumulativeInflation) + ",");
 				csv = csv.concat(results[j][i].equities.start + ",");
 				csv = csv.concat(results[j][i].bonds.start + ",");
 				csv = csv.concat(results[j][i].gold.start + ",");
