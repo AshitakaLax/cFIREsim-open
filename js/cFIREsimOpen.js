@@ -249,7 +249,7 @@ var Simulation = {
 
     },
     roundTwoDecimals: function(num) {
-        return +parseFloat(num).toFixed(2);
+        return Math.round(num*100) / 100.0;
     },
     cumulativeInflation: function(startCPI, endCPI) {
         return 1 + ((endCPI - startCPI) / startCPI);
@@ -277,7 +277,7 @@ var Simulation = {
 
         this.sim[i][j].portfolio.infAdjStartParts = adjustedParts;
         this.sim[i][j].portfolio.infAdjStart = adjustedParts.regular + adjustedParts.roth + adjustedParts.preTax;
-        this.roundTwoDecimals();
+        //this.roundTwoDecimals();
     },
     calcSpending: function(form, i, j) {
         var spending;
