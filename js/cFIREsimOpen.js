@@ -737,7 +737,7 @@ var Simulation = {
                 }
             }
         }
-
+ 
         //Evaluate ExtraSpending
         for (var k = 0; k < form.extraSpending.length; k++) {
             if (form.extraSpending[k].recurring == true) {
@@ -1006,13 +1006,22 @@ var Simulation = {
 	},
 	convertToCSV: function(results) { //converts a random cycle of simulation into a CSV file, for users to easily view
 		var csv = "";
-		/*
-		//Random number generator for supplying a CSV of only 1 random cycle. Disabled for debugging purposes.
-		function getRandomInt(min, max) {
-			return Math.floor(Math.random() * (max - min)) + min;
-		}
-		var num = getRandomInt(0, results.length);
-		*/
+		
+		results = results.slice();
+		results.sort(function(a, b) {
+			var aMin = Number.MAX_SAFE_INTEGER;
+			var bMin = Number.MAX_SAFE_INTEGER;
+			for (var i = 0; i < a.length; i++)
+			{
+				aMin = Math.min(aMin, a[i].portfolio.end);
+			}
+			for (var i = 0; i < b.length; i++)
+			{
+				bMin = Math.min(bMin, b[i].portfolio.end);
+			}
+			return aMin - bMin;
+		});
+
 		var tmpStr = "";
 		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
 		for (var j = 0; j < results.length; j++) {
