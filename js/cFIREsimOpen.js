@@ -1058,8 +1058,6 @@ var Simulation = {
 
 				}
 			}
-			csv = csv.concat(headers);
-
 		}
 
 		var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
