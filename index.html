@@ -303,7 +303,7 @@
                                 <span class="sr-only">Error:</span>
                                 Retirement Start must be >= Simulation Start. Retirement Start must be before Retirement End.
                             </div>
-														<label>Simulation Start Year:<input type="text" class="form-control toot" ng-model="data.simulationStartYear" id="simulationStartYear"></label>
+                            <label>Simulation Start Year:<input type="text" class="form-control toot" ng-model="data.simulationStartYear" id="simulationStartYear"></label>
                             <label data-toggle="tooltip" data-placement="bottom" title="The year in which you begin withdrawing money from retirement investments. This can be the current year, or any year in the future.">Retirement Year:<input type="text" class="form-control toot" ng-model="data.retirementStartYear" id="retirementStartYear"></label>
                             <label data-toggle="tooltip" data-placement="bottom" title="This is the end year for the simulation. Set this to be in line with your life expectancy estiamtes.">Retirement End Year:<input type="text" class="form-control" ng-model="data.retirementEndYear" id="retirementEndYear"></label>
                             <p>Pre-retirement length = {{ data.retirementStartYear - data.simulationStartYear }} years.</p>
