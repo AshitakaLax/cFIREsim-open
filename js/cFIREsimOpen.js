@@ -646,8 +646,10 @@ var Simulation = {
                 var idealWithdrawl2 = amountWithinBracket;
                 var actualWithdrawl2 = Math.min(idealWithdrawl2, amountInPreTax);
                 ret.toWithdraw += actualWithdrawl2;
-                amountInPreTax -= actualWithdrawl2;
-                ret.taxesResolved += actualWithdrawl2 * (1 - rate);
+				amountInPreTax -= actualWithdrawl2;
+				var resolvedHere = actualWithdrawl2 * (1 - rate);
+				ret.taxesResolved += resolvedHere;
+				leftToPay -= resolvedHere;
             }
         }
         return ret;
