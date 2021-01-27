@@ -496,26 +496,26 @@ var Simulation = {
 
             //Calculate growth
             if (form.data.method === "constant") {
-                type.values.equities.growth = Math.max(0, this.roundTwoDecimals(type.values.equities.start * (parseFloat(form.data.growth) / 100)));
+                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (parseFloat(form.data.growth) / 100));
                 type.values.dividends.growth = 0;
-                type.values.bonds.growth = Math.max(0, this.roundTwoDecimals(type.values.bonds.start * (parseFloat(form.data.growth) / 100)));
-                type.values.gold.growth = Math.max(0, this.roundTwoDecimals(type.values.gold.start * (parseFloat(form.data.growth) / 100)));
-                type.values.cash.growth = Math.max(0, this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100))));
+                type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (parseFloat(form.data.growth) / 100));
+                type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (parseFloat(form.data.growth) / 100));
+                type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             } else {
-                type.values.equities.growth = Math.max(0, this.roundTwoDecimals(type.values.equities.start * (this.sim[i][j].data.growth)));
-                type.values.dividends.growth = Math.max(0, this.roundTwoDecimals(type.values.equities.start * this.sim[i][j].data.dividends));
+                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (this.sim[i][j].data.growth));
+                type.values.dividends.growth = this.roundTwoDecimals(type.values.equities.start * this.sim[i][j].data.dividends);
 
                 //New Bond Calculation to incorporate capital appreciation. 
                 if (typeof (Market[this.sim[i][j].year + 1]) == "undefined") {
-                    type.values.bonds.growth = Math.max(0, this.roundTwoDecimals(type.values.bonds.start * (this.sim[i][j].data.fixed_income)));
+                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (this.sim[i][j].data.fixed_income));
                 } else {
                     var bondsGrowth1 = (this.sim[i][j].data.fixed_income) * (1 - (Math.pow((1 + Market[this.sim[i][j].year + 1].fixed_income), (-9)))) / Market[this.sim[i][j].year + 1].fixed_income;
                     var bondsGrowth2 = (1 / (Math.pow((1 + Market[this.sim[i][j].year + 1].fixed_income), 9))) - 1;
-                    type.values.bonds.growth = Math.max(0, this.roundTwoDecimals(type.values.bonds.start * (bondsGrowth1 + bondsGrowth2 + this.sim[i][j].data.fixed_income)));
+                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (bondsGrowth1 + bondsGrowth2 + this.sim[i][j].data.fixed_income));
                 }
 
-                type.values.gold.growth = Math.max(0, this.roundTwoDecimals(type.values.gold.start * (this.sim[i][j].data.gold)));
-                type.values.cash.growth = Math.max(0, this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100))));
+                type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (this.sim[i][j].data.gold));
+                type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             }
             type.values.equities.end = type.values.equities.start + type.values.equities.growth + type.values.dividends.growth;
             type.values.bonds.end = type.values.bonds.start + type.values.bonds.growth;
