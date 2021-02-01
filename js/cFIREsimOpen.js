@@ -198,10 +198,11 @@ var Simulation = {
     },
     cycle: function(startOfRange, endOfRange) {
         //The starting CPI value of this cycle, for comparison throughout the cycle.
-        var startCPI = Market[startOfRange.toString()].cpi;
+		//var startCPI = Market[startOfRange.toString()].cpi;
+		var cpi = 1.0;
         var cyc = [];
         for (var year = startOfRange; year < endOfRange; year++) {
-            data = Market[year.toString()];
+			data = Market[year.toString()];
             cyc.push({
                 "year": year,
                 "data": data,
@@ -238,11 +239,12 @@ var Simulation = {
                     "growth": null,
                     "val": null
                 },
-                "cumulativeInflation": this.cumulativeInflation(startCPI, data.cpi),
+                "cumulativeInflation": cpi,//this.cumulativeInflation(startCPI, data.cpi),
                 "cape": data.cape,
                 "socialSecurityAndPensionAdjustments": null,
                 "sumOfAdjustments": null,
-            });
+			});
+			cpi += (cpi * data.inflation);
         }
 
         return cyc;
