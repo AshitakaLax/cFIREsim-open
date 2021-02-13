@@ -203,6 +203,9 @@ var Simulation = {
         var cyc = [];
         for (var year = startOfRange; year < endOfRange; year++) {
 			data = Market[year.toString()];
+			if (data === undefined) {
+				throw ":(";
+			}
             cyc.push({
                 "year": year,
                 "data": data,
@@ -232,10 +235,6 @@ var Simulation = {
                 },
                 "cash": {
                     "start": null,
-                    "growth": null,
-                    "val": null
-                },
-                "dividends": {
                     "growth": null,
                     "val": null
                 },
@@ -475,7 +474,6 @@ var Simulation = {
 
         // for each asset class we need to end up with an object like {start: 4, growth: 3, end: 7}
         this.sim[i][j].equities = { start: 0, growth: 0, end: 0 };
-        this.sim[i][j].dividends = { val: 0, growth: 0 };
         this.sim[i][j].bonds = { start: 0, growth: 0, end: 0 };
         this.sim[i][j].gold = { start: 0, growth: 0, end: 0 };
         this.sim[i][j].cash = { start: 0, growth: 0, end: 0 };
@@ -493,19 +491,16 @@ var Simulation = {
                 bonds: { start: allocation.bonds * partValue },
                 gold: { start: allocation.gold * partValue },
                 cash: { start: allocation.cash * partValue },
-                dividends: {}
             };
 
             //Calculate growth
             if (form.data.method === "constant") {
                 type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (parseFloat(form.data.growth) / 100));
-                type.values.dividends.growth = 0;
                 type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (parseFloat(form.data.growth) / 100));
                 type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (parseFloat(form.data.growth) / 100));
                 type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             } else {
-                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (this.sim[i][j].data.growth));
-                type.values.dividends.growth = this.roundTwoDecimals(type.values.equities.start * this.sim[i][j].data.dividends);
+                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (this.sim[i][j].data.equities));
 
                 //New Bond Calculation to incorporate capital appreciation. 
                 if (typeof (Market[this.sim[i][j].year + 1]) == "undefined") {
@@ -519,13 +514,12 @@ var Simulation = {
                 type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (this.sim[i][j].data.gold));
                 type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             }
-            type.values.equities.end = type.values.equities.start + type.values.equities.growth + type.values.dividends.growth;
+            type.values.equities.end = type.values.equities.start + type.values.equities.growth;
             type.values.bonds.end = type.values.bonds.start + type.values.bonds.growth;
             type.values.gold.end = type.values.gold.start + type.values.gold.growth;
             type.values.cash.end = type.values.cash.start + type.values.cash.growth;
 
             var totalGrowth = type.values.equities.growth +
-                type.values.dividends.growth +
                 type.values.bonds.growth +
                 type.values.gold.growth +
                 type.values.cash.growth;
@@ -535,10 +529,8 @@ var Simulation = {
             }
 
             //add to totals
-            this.sim[i][j].equities.growth += this.roundTwoDecimals(type.values.equities.growth + type.values.dividends.growth);
-            this.sim[i][j].equities.end += this.roundTwoDecimals(type.values.equities.start + type.values.equities.growth + type.values.dividends.growth);
-            this.sim[i][j].dividends.growth += type.values.dividends.growth;
-            this.sim[i][j].dividends.val += type.values.dividends.growth;
+            this.sim[i][j].equities.growth += this.roundTwoDecimals(type.values.equities.growth);
+            this.sim[i][j].equities.end += this.roundTwoDecimals(type.values.equities.start + type.values.equities.growth);
             this.sim[i][j].bonds.growth += this.roundTwoDecimals(type.values.bonds.growth);
             this.sim[i][j].bonds.end += this.roundTwoDecimals(type.values.bonds.start + type.values.bonds.growth);
             this.sim[i][j].gold.growth += this.roundTwoDecimals(type.values.gold.growth);
@@ -1023,7 +1015,7 @@ var Simulation = {
 		});
 
 		var tmpStr = "";
-		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,infAdjPortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,dividends,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
+		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,infAdjPortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
 		for (var j = 0; j < results.length; j++) {
 			csv = csv.concat("Start=" + results[j][0].year + "\r\n");
 			csv = csv.concat(headers);
@@ -1044,7 +1036,6 @@ var Simulation = {
 				csv = csv.concat(results[j][i].gold.start + ",");
 				csv = csv.concat(results[j][i].cash.start + ",");
 				csv = csv.concat(results[j][i].equities.growth + ",");
-				csv = csv.concat(results[j][i].dividends.growth + ",");
 				csv = csv.concat(results[j][i].bonds.growth + ",");
 				csv = csv.concat(results[j][i].gold.growth + ",");
 				csv = csv.concat(results[j][i].cash.growth + ",");
