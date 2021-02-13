@@ -3,6 +3,10 @@
 // and then Wilshire 5000 after that https://www.bogleheads.org/wiki/US_total_market_index_returns
 // http://www.econ.yale.edu/~shiller/data.htm
 // https://advisor.visualcapitalist.com/historical-stock-market-returns/
+
+// CPI is January of the given year - https://www.bls.gov/regions/mid-atlantic/data/consumerpriceindexhistorical_us_table.htm
+// cape is cape ratio in January - https://www.multpl.com/shiller-pe/table/by-month
+
 var Market = {
     "1870": {
         "cpi": 12.46,
@@ -1490,5 +1494,12 @@ var Market = {
         "gold": 0,
         "growth": 0.257273694,
         "cape": 28.38016446
+    },
+    "2020": {
+        "cpi": 257.971,
+        "fixed_income": 0.0422, // nonsense
+        "gold": 0,
+        "growth": 0.2218,
+        "cape": 30.99
     }
 };
