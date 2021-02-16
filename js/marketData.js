@@ -12,77 +12,77 @@ var Market = {
         "cpi": 12.46,
         "fixed_income": 0.0532,
         "gold": 0.02656043,
-        "equities": 0.15315315000000002,
+        "equities": 0.0277,
         "inflation": 0.015248796147672605
     },
     "1871": {
         "cpi": 12.46,
         "fixed_income": 0.0532,
         "gold": 0.02656043,
-        "equities": 0.15315315000000002,
+        "equities": 0.0920,
         "inflation": 0.015248796147672605
     },
     "1872": {
         "cpi": 12.65,
         "fixed_income": 0.0536,
         "gold": -0.01940492,
-        "equities": 0.10561728000000001,
+        "equities": 0.0683,
         "inflation": 0.02292490118577062
     },
     "1873": {
         "cpi": 12.94,
         "fixed_income": 0.0558,
         "gold": 0.01539138,
-        "equities": -0.028864969999999997,
+        "equities": -0.1119,
         "inflation": -0.044049459041731076
     },
     "1874": {
         "cpi": 12.37,
         "fixed_income": 0.0547,
         "gold": 0.01948896,
-        "equities": 0.04506438,
+        "equities": 0.0170,
         "inflation": -0.06952303961196438
     },
     "1875": {
         "cpi": 11.51,
         "fixed_income": 0.0507,
         "gold": -0.0526763,
-        "equities": 0.05451541,
+        "equities": 0.0189,
         "inflation": -0.05734144222415294
     },
     "1876": {
         "cpi": 10.85,
         "fixed_income": 0.0459,
         "gold": -0.0470852,
-        "equities": -0.1367713,
+        "equities": -0.0645,
         "inflation": 0.008294930875575979
     },
     "1877": {
         "cpi": 10.94,
         "fixed_income": 0.0445,
         "gold": -0.02635294,
-        "equities": -0.002591550000000012,
+        "equities": 0.0705,
         "inflation": -0.15630712979890304
     },
     "1878": {
         "cpi": 9.23,
         "fixed_income": 0.0434,
         "gold": -0.00096665,
-        "equities": 0.15975383999999998,
+        "equities": 0.1604,
         "inflation": -0.10292524377031431
     },
     "1879": {
         "cpi": 8.28,
         "fixed_income": 0.0422,
         "gold": 0,
-        "equities": 0.47812848999999996,
+        "equities": 0.5710,
         "inflation": 0.2065217391304348
     },
     "1880": {
         "cpi": 9.99,
         "fixed_income": 0.0402,
         "gold": 0,
-        "equities": 0.25146771,
+        "equities": 0.2512,
         "inflation": -0.0570570570570571
     },
     "1881": {
@@ -90,7 +90,7 @@ var Market = {
         "fixed_income": 0.037,
         "gold": 0,
         "cape": 18.45,
-        "equities": -0.0008077500000000029,
+        "equities": 0.0736,
         "inflation": 0.08067940552016983
     },
     "1882": {
@@ -98,7 +98,7 @@ var Market = {
         "fixed_income": 0.0362,
         "gold": 0,
         "cape": 15.66,
-        "equities": 0.03547297,
+        "equities": -0.0422,
         "inflation": -0.018664047151277008
     },
     "1883": {
@@ -106,7 +106,7 @@ var Market = {
         "fixed_income": 0.0363,
         "gold": 0,
         "cape": 15.25,
-        "equities": -0.05321858000000001,
+        "equities": -0.0939,
         "inflation": -0.07607607607607603
     },
     "1884": {
@@ -114,7 +114,7 @@ var Market = {
         "fixed_income": 0.0362,
         "gold": 0,
         "cape": 14.41,
-        "equities": -0.11808880000000001,
+        "equities": -0.1847,
         "inflation": -0.10292524377031431
     },
     "1885": {
@@ -122,7 +122,7 @@ var Market = {
         "fixed_income": 0.0352,
         "gold": 0,
         "cape": 13.1,
-        "equities": 0.29816037,
+        "equities": 0.5085,
         "inflation": -0.035024154589371914
     },
     "1886": {
@@ -130,7 +130,7 @@ var Market = {
         "fixed_income": 0.0337,
         "gold": 0,
         "cape": 16.67,
-        "equities": 0.11890384000000001,
+        "equities": 0.1669,
         "inflation": 0
     },
     "1887": {
@@ -138,7 +138,7 @@ var Market = {
         "fixed_income": 0.0352,
         "gold": 0,
         "cape": 17.48,
-        "equities": -0.00851255,
+        "equities": -0.0770,
         "inflation": 0.04755944931163936
     },
     "1888": {
@@ -146,7 +146,7 @@ var Market = {
         "fixed_income": 0.0367,
         "gold": 0,
         "cape": 15.33,
-        "equities": 0.03357816,
+        "equities": 0.0645,
         "inflation": -0.04540023894862588
     },
     "1889": {
@@ -154,7 +154,7 @@ var Market = {
         "fixed_income": 0.0345,
         "gold": 0,
         "cape": 15.77,
-        "equities": 0.07045802000000001,
+        "equities": 0.0877,
         "inflation": -0.04755944931163958
     },
     "1890": {
@@ -162,7 +162,7 @@ var Market = {
         "fixed_income": 0.0342,
         "gold": 0,
         "cape": 17.18,
-        "equities": -0.059479559999999994,
+        "equities": -0.0659,
         "inflation": 0.024967148488830526
     },
     "1891": {
@@ -170,7 +170,7 @@ var Market = {
         "fixed_income": 0.0362,
         "gold": 0,
         "cape": 15.4,
-        "equities": 0.1838843,
+        "equities": 0.0774,
         "inflation": -0.060256410256410264
     },
     "1892": {
@@ -178,7 +178,7 @@ var Market = {
         "fixed_income": 0.036,
         "gold": 0,
         "cape": 18.96,
-        "equities": 0.05838475,
+        "equities": 0.1479,
         "inflation": 0.07776261937244211
     },
     "1893": {
@@ -186,7 +186,7 @@ var Market = {
         "fixed_income": 0.0375,
         "gold": 0,
         "cape": 17.6,
-        "equities": -0.18702317,
+        "equities": -0.1233,
         "inflation": -0.13291139240506333
     },
     "1894": {
@@ -194,7 +194,7 @@ var Market = {
         "fixed_income": 0.037,
         "gold": 0,
         "cape": 15.7,
-        "equities": 0.04090278,
+        "equities": 0.0194,
         "inflation": -0.040875912408758985
     },
     "1895": {
@@ -202,7 +202,7 @@ var Market = {
         "fixed_income": 0.0346,
         "gold": 0,
         "cape": 16.47,
-        "equities": 0.053717640000000004,
+        "equities": 0.0656,
         "inflation": 0.013698630136986356
     },
     "1896": {
@@ -210,7 +210,7 @@ var Market = {
         "fixed_income": 0.036,
         "gold": 0,
         "cape": 16.53,
-        "equities": 0.03259953,
+        "equities": 0.0486,
         "inflation": -0.028528528528528607
     },
     "1897": {
@@ -218,7 +218,7 @@ var Market = {
         "fixed_income": 0.034,
         "gold": 0,
         "cape": 16.99,
-        "equities": 0.19905213000000002,
+        "equities": 0.1841,
         "inflation": 0.029366306027820865
     },
     "1898": {
@@ -226,7 +226,7 @@ var Market = {
         "fixed_income": 0.0335,
         "gold": 0,
         "cape": 19.21,
-        "equities": 0.28313525,
+        "equities": 0.1638,
         "inflation": 0.01501501501501501
     },
     "1899": {
@@ -234,7 +234,7 @@ var Market = {
         "fixed_income": 0.031,
         "gold": 0,
         "cape": 22.87,
-        "equities": 0.03631579,
+        "equities": 0.0789,
         "inflation": 0.16863905325443795
     },
     "1900": {
@@ -242,7 +242,7 @@ var Market = {
         "fixed_income": 0.0315,
         "gold": 0,
         "cape": 18.63,
-        "equities": 0.19467213,
+        "equities": 0.2297,
         "inflation": -0.024050632911392422
     },
     "1901": {
@@ -250,7 +250,7 @@ var Market = {
         "fixed_income": 0.031,
         "gold": 0,
         "cape": 20.94,
-        "equities": 0.19118812000000002,
+        "equities": 0.2926,
         "inflation": 0.024643320363164856
     },
     "1902": {
@@ -258,7 +258,7 @@ var Market = {
         "fixed_income": 0.0318,
         "gold": 0,
         "cape": 22.3,
-        "equities": 0.08137931000000001,
+        "equities": 0.0944,
         "inflation": 0.09620253164556969
     },
     "1903": {
@@ -266,7 +266,7 @@ var Market = {
         "fixed_income": 0.033,
         "gold": 0,
         "cape": 20.29,
-        "equities": -0.17119385,
+        "equities": -0.0853,
         "inflation": -0.04387990762124716
     },
     "1904": {
@@ -274,7 +274,7 @@ var Market = {
         "fixed_income": 0.034,
         "gold": 0,
         "cape": 15.84,
-        "equities": 0.31387725,
+        "equities": 0.1966,
         "inflation": 0.022946859903381744
     },
     "1905": {
@@ -282,7 +282,7 @@ var Market = {
         "fixed_income": 0.0348,
         "gold": 0,
         "cape": 18.44,
-        "equities": 0.20779360000000002,
+        "equities": 0.1067,
         "inflation": 0
     },
     "1906": {
@@ -290,7 +290,7 @@ var Market = {
         "fixed_income": 0.0343,
         "gold": 0,
         "cape": 20.1,
-        "equities": 0.002613979999999995,
+        "equities": 0.0310,
         "inflation": 0.044864226682408415
     },
     "1907": {
@@ -298,7 +298,7 @@ var Market = {
         "fixed_income": 0.0367,
         "gold": 0,
         "cape": 17.19,
-        "equities": -0.24128661,
+        "equities": -0.2179,
         "inflation": -0.021468926553672274
     },
     "1908": {
@@ -306,7 +306,7 @@ var Market = {
         "fixed_income": 0.0387,
         "gold": 0,
         "cape": 11.89,
-        "equities": 0.38637956,
+        "equities": 0.3456,
         "inflation": 0.0323325635103926
     },
     "1909": {
@@ -314,7 +314,7 @@ var Market = {
         "fixed_income": 0.0376,
         "gold": 0,
         "cape": 14.75,
-        "equities": 0.15709713,
+        "equities": 0.2299,
         "inflation": 0.10738255033557054
     },
     "1910": {
@@ -322,7 +322,7 @@ var Market = {
         "fixed_income": 0.0391,
         "gold": 0,
         "cape": 14.52,
-        "equities": -0.03645832999999999,
+        "equities": -0.1094,
         "inflation": -0.06767676767676767
     },
     "1911": {
@@ -330,7 +330,7 @@ var Market = {
         "fixed_income": 0.0398,
         "gold": 0,
         "cape": 14.02,
-        "equities": 0.03451996,
+        "equities": 0.0737,
         "inflation": -0.010834236186348822
     },
     "1912": {
@@ -338,7 +338,7 @@ var Market = {
         "fixed_income": 0.0401,
         "gold": 0,
         "cape": 13.78,
-        "equities": 0.07135965,
+        "equities": 0.0530,
         "inflation": 0.07338444687842283
     },
     "1913": {
@@ -346,7 +346,7 @@ var Market = {
         "fixed_income": 0.0445,
         "gold": 0,
         "cape": 13.13,
-        "equities": -0.0483871,
+        "equities": -0.0932,
         "inflation": 0.020408163265306145
     },
     "1914": {
@@ -354,7 +354,7 @@ var Market = {
         "fixed_income": 0.0416,
         "gold": 0,
         "cape": 11.62,
-        "equities": -0.04958184000000001,
+        "equities": -0.0325,
         "inflation": 0.010000000000000009
     },
     "1915": {
@@ -362,7 +362,7 @@ var Market = {
         "fixed_income": 0.0424,
         "gold": 0,
         "cape": 10.34,
-        "equities": 0.30358288,
+        "equities": 0.2173,
         "inflation": 0.02970297029702973
     },
     "1916": {
@@ -370,7 +370,7 @@ var Market = {
         "fixed_income": 0.0405,
         "gold": 0,
         "cape": 12.53,
-        "equities": 0.07296891,
+        "equities": 0.0719,
         "inflation": 0.125
     },
     "1917": {
@@ -378,7 +378,7 @@ var Market = {
         "fixed_income": 0.0423,
         "gold": 0,
         "cape": 10.98,
-        "equities": -0.18695925000000002,
+        "equities": -0.1644,
         "inflation": 0.19658119658119655
     },
     "1918": {
@@ -386,7 +386,7 @@ var Market = {
         "fixed_income": 0.0457,
         "gold": 0,
         "cape": 6.63,
-        "equities": 0.18307905,
+        "equities": 0.1127,
         "inflation": 0.1785714285714286
     },
     "1919": {
@@ -394,7 +394,7 @@ var Market = {
         "fixed_income": 0.045,
         "gold": 0,
         "cape": 6.09,
-        "equities": 0.19703184,
+        "equities": 0.1609,
         "inflation": 0.16969696969696968
     },
     "1920": {
@@ -402,7 +402,7 @@ var Market = {
         "fixed_income": 0.0497,
         "gold": 0,
         "cape": 5.99,
-        "equities": -0.13496037,
+        "equities": -0.1502,
         "inflation": -0.015544041450777257
     },
     "1921": {
@@ -410,7 +410,7 @@ var Market = {
         "fixed_income": 0.0509,
         "gold": 0,
         "cape": 5.12,
-        "equities": 0.09786217,
+        "equities": 0.1102,
         "inflation": -0.1105263157894738
     },
     "1922": {
@@ -418,7 +418,7 @@ var Market = {
         "fixed_income": 0.043,
         "gold": 0,
         "cape": 6.28,
-        "equities": 0.28276712,
+        "equities": 0.2672,
         "inflation": -0.005917159763313529
     },
     "1923": {
@@ -426,7 +426,7 @@ var Market = {
         "fixed_income": 0.0436,
         "gold": 0,
         "cape": 8.15,
-        "equities": 0.04962921,
+        "equities": 0.0390,
         "inflation": 0.029761904761904656
     },
     "1924": {
@@ -434,7 +434,7 @@ var Market = {
         "fixed_income": 0.0406,
         "gold": 0,
         "cape": 8.07,
-        "equities": 0.25840318,
+        "equities": 0.2577,
         "inflation": 0
     },
     "1925": {
@@ -442,7 +442,7 @@ var Market = {
         "fixed_income": 0.0386,
         "gold": 0,
         "cape": 9.69,
-        "equities": 0.24803402,
+        "equities": 0.2912,
         "inflation": 0.03468208092485536
     },
     "1926": {
@@ -450,7 +450,7 @@ var Market = {
         "fixed_income": 0.0368,
         "gold": 0,
         "cape": 11.33,
-        "equities": 0.10731225999999999,
+        "equities": 0.1162,
         "inflation": -0.022346368715083775
     },
     "1927": {
@@ -458,7 +458,7 @@ var Market = {
         "fixed_income": 0.0334,
         "gold": 0,
         "cape": 13.18,
-        "equities": 0.36020149999999995,
+        "equities": 0.3749,
         "inflation": -0.011428571428571344
     },
     "1928": {
@@ -466,7 +466,7 @@ var Market = {
         "fixed_income": 0.0333,
         "gold": 0,
         "cape": 18.79,
-        "equities": 0.46244723,
+        "equities": 0.4361,
         "inflation": -0.011560693641618491
     },
     "1929": {
@@ -474,7 +474,7 @@ var Market = {
         "fixed_income": 0.036,
         "gold": 0,
         "cape": 27.06,
-        "equities": -0.09211585,
+        "equities": -0.0842,
         "inflation": 0
     },
     "1930": {
@@ -482,7 +482,7 @@ var Market = {
         "fixed_income": 0.0329,
         "gold": 0,
         "cape": 22.3,
-        "equities": -0.21921695000000002,
+        "equities": -0.2490,
         "inflation": -0.07017543859649134
     },
     "1931": {
@@ -490,7 +490,7 @@ var Market = {
         "fixed_income": 0.0334,
         "gold": 0,
         "cape": 16.7,
-        "equities": -0.42010638,
+        "equities": -0.4334,
         "inflation": -0.10062893081761004
     },
     "1932": {
@@ -498,7 +498,7 @@ var Market = {
         "fixed_income": 0.0368,
         "gold": 0.56361877,
         "cape": 9.31,
-        "equities": -0.05020482000000001,
+        "equities": -0.0819,
         "inflation": -0.09790209790209792
     },
     "1933": {
@@ -506,7 +506,7 @@ var Market = {
         "fixed_income": 0.0331,
         "gold": 0.08292079,
         "cape": 8.73,
-        "equities": 0.55641749,
+        "equities": 0.5399,
         "inflation": 0.02325581395348819
     },
     "1934": {
@@ -514,7 +514,7 @@ var Market = {
         "fixed_income": 0.0312,
         "gold": 0,
         "cape": 13.02,
-        "equities": -0.0796205,
+        "equities": -0.0144,
         "inflation": 0.030303030303030276
     },
     "1935": {
@@ -522,7 +522,7 @@ var Market = {
         "fixed_income": 0.0279,
         "gold": 0,
         "cape": 11.49,
-        "equities": 0.53455723,
+        "equities": 0.4767,
         "inflation": 0.014705882352941346
     },
     "1936": {
@@ -530,7 +530,7 @@ var Market = {
         "fixed_income": 0.0265,
         "gold": 0,
         "cape": 17.08,
-        "equities": 0.31322674,
+        "equities": 0.3392,
         "inflation": 0.021739130434782483
     },
     "1937": {
@@ -538,7 +538,7 @@ var Market = {
         "fixed_income": 0.0268,
         "gold": 0,
         "cape": 21.61,
-        "equities": -0.31552018000000004,
+        "equities": -0.3503,
         "inflation": 0.007092198581560183
     },
     "1938": {
@@ -546,7 +546,7 @@ var Market = {
         "fixed_income": 0.0256,
         "gold": 0,
         "cape": 13.51,
-        "equities": 0.17536100999999998,
+        "equities": 0.3112,
         "inflation": -0.014084507042253502
     },
     "1939": {
@@ -554,7 +554,7 @@ var Market = {
         "fixed_income": 0.0236,
         "gold": -0.01428571,
         "cape": 15.6,
-        "equities": 0.02506664,
+        "equities": -0.0041,
         "inflation": -0.0071428571428571175
     },
     "1940": {
@@ -562,7 +562,7 @@ var Market = {
         "fixed_income": 0.0221,
         "gold": 0.02898551,
         "cape": 16.37,
-        "equities": -0.09159893999999999,
+        "equities": -0.0978,
         "inflation": 0.014388489208633004
     },
     "1941": {
@@ -570,7 +570,7 @@ var Market = {
         "fixed_income": 0.0195,
         "gold": 0,
         "cape": 13.9,
-        "equities": -0.08973147000000001,
+        "equities": -0.1159,
         "inflation": 0.11347517730496448
     },
     "1942": {
@@ -578,7 +578,7 @@ var Market = {
         "fixed_income": 0.0246,
         "gold": 0.02816901,
         "cape": 10.1,
-        "equities": 0.20865991,
+        "equities": 0.2034,
         "inflation": 0.07643312101910826
     },
     "1943": {
@@ -586,7 +586,7 @@ var Market = {
         "fixed_income": 0.0247,
         "gold": -0.00684932,
         "cape": 10.15,
-        "equities": 0.23290386999999999,
+        "equities": 0.2590,
         "inflation": 0.029585798816567976
     },
     "1944": {
@@ -594,7 +594,7 @@ var Market = {
         "fixed_income": 0.0248,
         "gold": 0.02758621,
         "cape": 11.05,
-        "equities": 0.19015468,
+        "equities": 0.1975,
         "inflation": 0.02298850574712663
     },
     "1945": {
@@ -602,7 +602,7 @@ var Market = {
         "fixed_income": 0.0237,
         "gold": 0.02684564,
         "cape": 11.96,
-        "equities": 0.38349392,
+        "equities": 0.3644,
         "inflation": 0.022471910112359383
     },
     "1946": {
@@ -610,7 +610,7 @@ var Market = {
         "fixed_income": 0.0219,
         "gold": 0.12418301,
         "cape": 15.62,
-        "equities": -0.11894189999999999,
+        "equities": -0.0807,
         "inflation": 0.18131868131868134
     },
     "1947": {
@@ -618,7 +618,7 @@ var Market = {
         "fixed_income": 0.0225,
         "gold": -0.02325581,
         "cape": 11.47,
-        "equities": 0.021915390000000003,
+        "equities": 0.0571,
         "inflation": 0.10232558139534875
     },
     "1948": {
@@ -626,7 +626,7 @@ var Market = {
         "fixed_income": 0.0244,
         "gold": -0.03571429,
         "cape": 10.42,
-        "equities": 0.09260505999999999,
+        "equities": 0.0550,
         "inflation": 0.012658227848101333
     },
     "1949": {
@@ -634,7 +634,7 @@ var Market = {
         "fixed_income": 0.0231,
         "gold": -0.00617284,
         "cape": 10.25,
-        "equities": 0.1605903,
+        "equities": 0.1879,
         "inflation": -0.02083333333333337
     },
     "1950": {
@@ -642,7 +642,7 @@ var Market = {
         "fixed_income": 0.0232,
         "gold": -0.00621118,
         "cape": 10.75,
-        "equities": 0.32464455,
+        "equities": 0.3171,
         "inflation": 0.08085106382978724
     },
     "1951": {
@@ -650,7 +650,7 @@ var Market = {
         "fixed_income": 0.0257,
         "gold": -0.0325,
         "cape": 11.9,
-        "equities": 0.21059264,
+        "equities": 0.2402,
         "inflation": 0.04330708661417337
     },
     "1952": {
@@ -658,7 +658,7 @@ var Market = {
         "fixed_income": 0.0268,
         "gold": -0.08268734,
         "cape": 12.53,
-        "equities": 0.14069161,
+        "equities": 0.1837,
         "inflation": 0.0037735849056603765
     },
     "1953": {
@@ -666,7 +666,7 @@ var Market = {
         "fixed_income": 0.0283,
         "gold": -0.00704225,
         "cape": 13.01,
-        "equities": 0.026356,
+        "equities": -0.0099,
         "inflation": 0.011278195488721776
     },
     "1954": {
@@ -674,7 +674,7 @@ var Market = {
         "fixed_income": 0.0248,
         "gold": -0.00283688,
         "cape": 12,
-        "equities": 0.45548586,
+        "equities": 0.5262,
         "inflation": -0.0074349442379182396
     },
     "1955": {
@@ -682,7 +682,7 @@ var Market = {
         "fixed_income": 0.0261,
         "gold": 0.00142248,
         "cape": 15.99,
-        "equities": 0.28361433,
+        "equities": 0.3156,
         "inflation": 0.0037453183520599342
     },
     "1956": {
@@ -690,7 +690,7 @@ var Market = {
         "fixed_income": 0.029,
         "gold": 0.00142046,
         "cape": 18.29,
-        "equities": 0.06681766,
+        "equities": 0.0656,
         "inflation": 0.029850746268656803
     },
     "1957": {
@@ -698,7 +698,7 @@ var Market = {
         "fixed_income": 0.0346,
         "gold": 0,
         "cape": 16.72,
-        "equities": -0.05664385,
+        "equities": -0.1078,
         "inflation": 0.03623188405797095
     },
     "1958": {
@@ -706,7 +706,7 @@ var Market = {
         "fixed_income": 0.0309,
         "gold": 0,
         "cape": 13.79,
-        "equities": 0.39599537999999995,
+        "equities": 0.4336,
         "inflation": 0.013986013986013957
     },
     "1959": {
@@ -714,7 +714,7 @@ var Market = {
         "fixed_income": 0.0402,
         "gold": 0.03546099,
         "cape": 17.98,
-        "equities": 0.07491316,
+        "equities": 0.1196,
         "inflation": 0.010344827586207028
     },
     "1960": {
@@ -722,7 +722,7 @@ var Market = {
         "fixed_income": 0.0472,
         "gold": -0.02739726,
         "cape": 18.34,
-        "equities": 0.0612902,
+        "equities": 0.0047,
         "inflation": 0.017064846416382284
     },
     "1961": {
@@ -730,7 +730,7 @@ var Market = {
         "fixed_income": 0.0384,
         "gold": -0.00422535,
         "cape": 18.47,
-        "equities": 0.18916059,
+        "equities": 0.2689,
         "inflation": 0.006711409395973034
     },
     "1962": {
@@ -738,7 +738,7 @@ var Market = {
         "fixed_income": 0.0408,
         "gold": -0.00282885,
         "cape": 21.2,
-        "equities": -0.02871478,
+        "equities": -0.0837,
         "inflation": 0.013333333333333197
     },
     "1963": {
@@ -746,7 +746,7 @@ var Market = {
         "fixed_income": 0.0383,
         "gold": 0.00283688,
         "cape": 19.26,
-        "equities": 0.2079107,
+        "equities": 0.2280,
         "inflation": 0.016447368421052655
     },
     "1964": {
@@ -754,7 +754,7 @@ var Market = {
         "fixed_income": 0.0417,
         "gold": 0.00424328,
         "cape": 21.63,
-        "equities": 0.15652937,
+        "equities": 0.1648,
         "inflation": 0.009708737864077666
     },
     "1965": {
@@ -762,7 +762,7 @@ var Market = {
         "fixed_income": 0.0419,
         "gold": -0.0028169,
         "cape": 23.27,
-        "equities": 0.1128271,
+        "equities": 0.1245,
         "inflation": 0.019230769230769384
     },
     "1966": {
@@ -770,7 +770,7 @@ var Market = {
         "fixed_income": 0.0461,
         "gold": 0.00282486,
         "cape": 24.06,
-        "equities": -0.06568795,
+        "equities": -0.1006,
         "inflation": 0.03459119496855334
     },
     "1967": {
@@ -778,7 +778,7 @@ var Market = {
         "fixed_income": 0.0458,
         "gold": 0.22535211,
         "cape": 20.43,
-        "equities": 0.15950266000000002,
+        "equities": 0.2398,
         "inflation": 0.03647416413373872
     },
     "1968": {
@@ -786,7 +786,7 @@ var Market = {
         "fixed_income": 0.0553,
         "gold": -0.05747126,
         "cape": 21.51,
-        "equities": 0.10406144,
+        "equities": 0.1106,
         "inflation": 0.04398826979472137
     },
     "1969": {
@@ -794,7 +794,7 @@ var Market = {
         "fixed_income": 0.0604,
         "gold": -0.05121951,
         "cape": 21.19,
-        "equities": -0.08441176,
+        "equities": -0.0850,
         "inflation": 0.06179775280898858
     },
     "1970": {
