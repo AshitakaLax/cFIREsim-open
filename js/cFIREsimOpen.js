@@ -134,22 +134,22 @@ var Simulation = {
 			case "singleCycle":
 				numCycles = 1;
 				cycleStart = parseInt(form.data.singleStart);
-				var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
+				var cyc = this.cycle(form.currentAge, cycleStart, cycleStart + cycleLength - 1);
 				this.sim.push(cyc);
 				break;
 			case "historicalAll":
 			case "constant":
-				numCycles = Object.keys(Market).length - cycleLength + 1;
+				numCycles = Object.keys(Market).length - cycleLength;
 				for (cycleStart; cycleStart < 1871 + numCycles; cycleStart++) {
-					var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
+					var cyc = this.cycle(form.currentAge, cycleStart, cycleStart + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 				break;
 			case "historicalSpecific":
-				numCycles = (form.data.end - form.data.start) - cycleLength + 2;
+				numCycles = (form.data.end - form.data.start) - cycleLength + 1;
 				cycleStart = parseInt(form.data.start);
 				for (var i = cycleStart; i < (cycleStart + numCycles); i++) {
-					var cyc = this.cycle(i, i + cycleLength - 1);
+					var cyc = this.cycle(form.currentAge, i, i + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 				break;
@@ -165,7 +165,7 @@ var Simulation = {
 				}
 				for (i=0; i < filteredYears.length; i++){
 					cycleStart = filteredYears[i]
-					var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
+					var cyc = this.cycle(form.currentAge, cycleStart, cycleStart + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 		}
@@ -196,7 +196,7 @@ var Simulation = {
 		}
 
     },
-    cycle: function(startOfRange, endOfRange) {
+    cycle: function(age, startOfRange, endOfRange) {
         //The starting CPI value of this cycle, for comparison throughout the cycle.
 		//var startCPI = Market[startOfRange.toString()].cpi;
 		var cpi = 1.0;
@@ -217,7 +217,8 @@ var Simulation = {
                     "fees": null
                 },
                 "spending": null,
-                "infAdjSpending": null,
+				"infAdjSpending": null,
+				"age": age + (year - startOfRange),
                 "equities": {
                     "start": null,
                     "growth": null,
@@ -1015,12 +1016,13 @@ var Simulation = {
 		});
 
 		var tmpStr = "";
-		var headers = "Year,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,infAdjPortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
+		var headers = "Year,Age,CumulativeInflation,portfolio.start,portfolio.start.regular,portfolio.start.roth,portfolio.start.preTax,portfolio.infAdjStart,spending,infAdjSpending,PortfolioAdjustments,infAdjPortfolioAdjustments,Equities,Bonds,Gold,Cash,equities.growth,bonds.growth,gold.growth,cash.growth,fees,portfolio.end,portfolio.end.regular,portfolio.end.roth,portfolio.end.preTax,portfolio.infAdjEnd\r\n";
 		for (var j = 0; j < results.length; j++) {
 			csv = csv.concat("Start=" + results[j][0].year + "\r\n");
 			csv = csv.concat(headers);
 			for (var i = 0; i < results[j].length; i++) {
 				csv = csv.concat(results[j][i].year + ",");
+				csv = csv.concat(results[j][i].age + ",");
 				csv = csv.concat(results[j][i].cumulativeInflation + ",");
 				csv = csv.concat(results[j][i].portfolio.start + ",");
 				csv = csv.concat(results[j][i].portfolio.startParts.regular + ",");

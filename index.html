@@ -315,6 +315,10 @@
                                 Simulation Years:
                                 <input type="text" class="form-control" ng-model="data.simulationYears" id="simulationYears">
                             </label>
+                            <label data-toggle="tooltip" data-placement="bottom" title="Number of years to simulate. Set this to be in line with your life expectancy estimate.">
+                                Current Age:
+                                <input type="text" class="form-control" ng-model="data.currentAge" id="currentAge">
+                            </label>
                             <p>Pre-retirement length = {{ data.retirementStartYear - data.simulationStartYear }} years.</p>
                             <p>Retirement length = {{ data.simulationYears - (data.retirementStartYear - data.simulationStartYear) }} years.</p>
                             <p>Simulation end year = {{ data.simulationYears + parseInt(data.simulationStartYear) }} years.</p>
@@ -1755,6 +1759,7 @@
 <script type="text/javascript" src="js/accounting.min.js" defer></script>
 <script type="text/javascript" src="js/cFIREsimOpen.js"></script>
 <script type="text/javascript" src="js/marketData.js" defer></script>
+<script type="text/javascript" src="js/RMD.js" defer></script>
 <script type="text/javascript" src="js/spendingModule.js" defer></script>
 <script type="text/javascript" src="js/statsModule.js" defer></script>
 <script type="text/javascript" src="js/validation.js" defer></script>
@@ -1786,6 +1791,7 @@
                     simulationStartYear: new Date().getFullYear(),
                     retirementStartYear: new Date().getFullYear(),
                     simulationYears: 30,
+                    currentAge: 50,
                     data: {
                         method: "historicalAll",
                         start: 1900,
