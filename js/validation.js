@@ -133,7 +133,8 @@ $(document).ready(function() {
 	function cmpYears(){
 		var simulationStartYear = parseInt($("input[ng-model='data.simulationStartYear']").val());
 		var retirementStartYear = parseInt($("input[ng-model='data.retirementStartYear']").val());
-		var endYear = parseInt($("input[ng-model='data.retirementEndYear']").val());
+		var simulationYears = parseInt($("input[ng-model='data.simulationYears']").val());
+		var endYear = simulationStartYear + simulationYears;
 		if((retirementStartYear < endYear) && (retirementStartYear >= simulationStartYear)){
 			return true;
 		}else{
@@ -158,7 +159,7 @@ $(document).ready(function() {
 			$(".runSim").addClass("disabled");
 		}
 	});
-	$("input[ng-model='data.retirementEndYear']").keyup(function() {
+	$("input[ng-model='data.simulationYears']").keyup(function() {
 		if(cmpYears()){
 			$("#yearsError").hide();
 			$(".runSim").removeClass("disabled");
@@ -465,7 +466,7 @@ function cmpDataOptions(){
 	var startYear = $("input[ng-model='data.data.start']")[0].value;
 	var endYear = $("input[ng-model='data.data.end']")[0].value;
 	var simulationStartYear = $("input[ng-model='data.simulationStartYear']")[0].value;
-	var retirementEndYear = $("input[ng-model='data.retirementEndYear']")[0].value;
+	var simulationYears = $("input[ng-model='data.simulationYears']")[0].value;
 	var currentYear = Math.max.apply(null,Object.keys(Market));
 	var rate = $("input[ng-model='data.data.growth']")[0].value;
 	var singleStart = $("input[ng-model='data.data.singleStart']")[0].value;
@@ -478,7 +479,7 @@ function cmpDataOptions(){
 	if(((isNaN(parseInt(startYear))) || (isNaN(parseInt(endYear))))){
 		yearsTrigger = false;
 	}
-	if(	(parseInt(endYear) - parseInt(startYear)) <  (parseInt(retirementEndYear) - parseInt(retirementStartYear))					){
+	if(	(parseInt(endYear) - parseInt(startYear)) < parseInt(simulationYears)){
 		yearsTrigger = false;
 	}
 
@@ -487,7 +488,7 @@ function cmpDataOptions(){
 	}
 
 	if ((parseInt(singleStart) < 1871) || isNaN(parseInt(singleStart)) ||
-		(currentYear - parseInt(singleStart)) <  (parseInt(retirementEndYear) - parseInt(simulationStartYear))){
+		(currentYear - parseInt(singleStart)) < parseInt(simulationYears)){
 		yearTrigger = false;
 	}
 

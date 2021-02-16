@@ -125,7 +125,7 @@ var Simulation = {
 		console.log("Form Data:", form);
 		this.sim = []; //Deletes previous simulation values if they exist.
 		var startYear = form.simulationStartYear;
-		var endYear = form.retirementEndYear;
+		var endYear = form.simulationStartYear + parseInt(form.simulationYears);
 		var cycleLength = endYear - startYear + 1;
 		var numCycles = 0;
 		var cycleStart = 1871;
@@ -804,7 +804,7 @@ var Simulation = {
 			}
 		} else if (form.investigate.type == 'retirementYear') {
 			var min = form.simulationStartYear,
-				max = form.retirementEndYear;
+				max = form.simulationStartYear + parseInt(form.simulationYears);
 			while (min <= max) {
 				form.retirementStartYear = min;
 				for (var i = 0; i < this.sim.length; i++) {
