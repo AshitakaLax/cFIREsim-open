@@ -134,14 +134,14 @@ var Simulation = {
 			case "singleCycle":
 				numCycles = 1;
 				cycleStart = parseInt(form.data.singleStart);
-				var cyc = this.cycle(cycleStart, cycleStart + cycleLength);
+				var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
 				this.sim.push(cyc);
 				break;
 			case "historicalAll":
 			case "constant":
 				numCycles = Object.keys(Market).length - cycleLength + 1;
 				for (cycleStart; cycleStart < 1871 + numCycles; cycleStart++) {
-					var cyc = this.cycle(cycleStart, cycleStart + cycleLength);
+					var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 				break;
@@ -149,7 +149,7 @@ var Simulation = {
 				numCycles = (form.data.end - form.data.start) - cycleLength + 2;
 				cycleStart = parseInt(form.data.start);
 				for (var i = cycleStart; i < (cycleStart + numCycles); i++) {
-					var cyc = this.cycle(i, i + cycleLength);
+					var cyc = this.cycle(i, i + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 				break;
@@ -165,7 +165,7 @@ var Simulation = {
 				}
 				for (i=0; i < filteredYears.length; i++){
 					cycleStart = filteredYears[i]
-					var cyc = this.cycle(cycleStart, cycleStart + cycleLength);
+					var cyc = this.cycle(cycleStart, cycleStart + cycleLength - 1);
 					this.sim.push(cyc);
 				}
 		}
