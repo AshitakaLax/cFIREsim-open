@@ -423,16 +423,25 @@ var Simulation = {
         return parts.regular + parts.roth + parts.preTax;
     },
     calcMarketGains: function(form, i, j) {
-
-        var sumOfAdjustments = this.sim[i][j].sumOfAdjustments; //Sum of all portfolio adjustments for this given year. SS/Pensions/Extra Income/Extra Spending.
-        var netSpend = this.sim[i][j].spending - sumOfAdjustments; // the amount which needs to be used from the portfolio.
+		var simYear = this.sim[i][j];
+        var sumOfAdjustments = simYear.sumOfAdjustments; //Sum of all portfolio adjustments for this given year. SS/Pensions/Extra Income/Extra Spending.
+        var netSpend = simYear.spending - sumOfAdjustments; // the amount which needs to be used from the portfolio.
 
         var taxesIncome = {
-            income: this.sim[i][j].taxableAdjustments,
+            income: simYear.taxableAdjustments,
             capitalGains: 0
         };
 
-        var portfolioParts = this.sim[i][j].portfolio.startParts;
+        var portfolioParts = simYear.portfolio.startParts;
+
+		// do RMD
+		if (portfolioParts.preTax > 0)
+		{
+			var rmd = portfolioParts.preTax * RMD.getRmdPercentage(simYear.age)
+			portfolioParts.preTax -= rmd;
+			portfolioParts.regular += rmd;
+			taxesIncome.income += rmd;
+		}
 
         // now simulate either taking the money out of the portfolio, or adding it in.
         if (netSpend < 0) {
@@ -469,15 +478,15 @@ var Simulation = {
 				portfolioParts.roth = 0;
 			}
             //TODO: account for required minimum distributions
-        }
+		}
 
         var allocation = this.calcAllocation(form, i, j);
 
         // for each asset class we need to end up with an object like {start: 4, growth: 3, end: 7}
-        this.sim[i][j].equities = { start: 0, growth: 0, end: 0 };
-        this.sim[i][j].bonds = { start: 0, growth: 0, end: 0 };
-        this.sim[i][j].gold = { start: 0, growth: 0, end: 0 };
-        this.sim[i][j].cash = { start: 0, growth: 0, end: 0 };
+        simYear.equities = { start: 0, growth: 0, end: 0 };
+        simYear.bonds = { start: 0, growth: 0, end: 0 };
+        simYear.gold = { start: 0, growth: 0, end: 0 };
+        simYear.cash = { start: 0, growth: 0, end: 0 };
 
         // loop through the different taxable parts
         var types = [{ name: "regular" }, { name: "roth" }, { name: "preTax" }];
@@ -501,18 +510,18 @@ var Simulation = {
                 type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (parseFloat(form.data.growth) / 100));
                 type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             } else {
-                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (this.sim[i][j].data.equities));
+                type.values.equities.growth = this.roundTwoDecimals(type.values.equities.start * (simYear.data.equities));
 
                 //New Bond Calculation to incorporate capital appreciation. 
-                if (typeof (Market[this.sim[i][j].year + 1]) == "undefined") {
-                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (this.sim[i][j].data.fixed_income));
+                if (typeof (Market[simYear.year + 1]) == "undefined") {
+                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (simYear.data.fixed_income));
                 } else {
-                    var bondsGrowth1 = (this.sim[i][j].data.fixed_income) * (1 - (Math.pow((1 + Market[this.sim[i][j].year + 1].fixed_income), (-9)))) / Market[this.sim[i][j].year + 1].fixed_income;
-                    var bondsGrowth2 = (1 / (Math.pow((1 + Market[this.sim[i][j].year + 1].fixed_income), 9))) - 1;
-                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (bondsGrowth1 + bondsGrowth2 + this.sim[i][j].data.fixed_income));
+                    var bondsGrowth1 = (simYear.data.fixed_income) * (1 - (Math.pow((1 + Market[simYear.year + 1].fixed_income), (-9)))) / Market[simYear.year + 1].fixed_income;
+                    var bondsGrowth2 = (1 / (Math.pow((1 + Market[simYear.year + 1].fixed_income), 9))) - 1;
+                    type.values.bonds.growth = this.roundTwoDecimals(type.values.bonds.start * (bondsGrowth1 + bondsGrowth2 + simYear.data.fixed_income));
                 }
 
-                type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (this.sim[i][j].data.gold));
+                type.values.gold.growth = this.roundTwoDecimals(type.values.gold.start * (simYear.data.gold));
                 type.values.cash.growth = this.roundTwoDecimals(type.values.cash.start * ((form.portfolio.growthOfCash / 100)));
             }
             type.values.equities.end = type.values.equities.start + type.values.equities.growth;
@@ -530,14 +539,14 @@ var Simulation = {
             }
 
             //add to totals
-            this.sim[i][j].equities.growth += this.roundTwoDecimals(type.values.equities.growth);
-            this.sim[i][j].equities.end += this.roundTwoDecimals(type.values.equities.start + type.values.equities.growth);
-            this.sim[i][j].bonds.growth += this.roundTwoDecimals(type.values.bonds.growth);
-            this.sim[i][j].bonds.end += this.roundTwoDecimals(type.values.bonds.start + type.values.bonds.growth);
-            this.sim[i][j].gold.growth += this.roundTwoDecimals(type.values.gold.growth);
-            this.sim[i][j].gold.end += this.roundTwoDecimals(type.values.gold.start + type.values.gold.growth);
-            this.sim[i][j].cash.growth += this.roundTwoDecimals(type.values.cash.growth);
-            this.sim[i][j].cash.end += this.roundTwoDecimals(type.values.cash.start + type.values.cash.growth);
+            simYear.equities.growth += this.roundTwoDecimals(type.values.equities.growth);
+            simYear.equities.end += this.roundTwoDecimals(type.values.equities.start + type.values.equities.growth);
+            simYear.bonds.growth += this.roundTwoDecimals(type.values.bonds.growth);
+            simYear.bonds.end += this.roundTwoDecimals(type.values.bonds.start + type.values.bonds.growth);
+            simYear.gold.growth += this.roundTwoDecimals(type.values.gold.growth);
+            simYear.gold.end += this.roundTwoDecimals(type.values.gold.start + type.values.gold.growth);
+            simYear.cash.growth += this.roundTwoDecimals(type.values.cash.growth);
+            simYear.cash.end += this.roundTwoDecimals(type.values.cash.start + type.values.cash.growth);
 
             endParts[type.name] = type.values.equities.end +
                 type.values.bonds.end +
@@ -547,7 +556,7 @@ var Simulation = {
 
         this.payTaxes(form, endParts, taxesIncome);
 
-        this.sim[i][j].portfolio.endParts = endParts;
+        simYear.portfolio.endParts = endParts;
     },
     payTaxes: function(
         form,
