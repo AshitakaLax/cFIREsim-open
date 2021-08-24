@@ -16,3 +16,21 @@ Disclaimers:
 Collaboration: Primary discussion of the project can be done here on the github issues page.
 
 License: This software falls under the Apache License 2.0
+
+## Docker
+
+Build the dockerfile
+
+    docker build . -t cfiresim-open
+
+Run the Docker image
+
+    docker run -dp 8080:80 cfiresim-open
+
+Navigate to http://localhost:8080
+
+## Docker Compose
+
+   docker-compose up -d
+
+Navigate to http://localhost:8080
