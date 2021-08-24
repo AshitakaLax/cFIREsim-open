@@ -1,3 +1,5 @@
+///<reference path="/js/spendingModule.js"/>
+
 'use strict';
 
 describe("percentOfPortfolio", function() {

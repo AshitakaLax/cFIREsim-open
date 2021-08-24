@@ -157,9 +157,9 @@ var SpendingModule = {
     },
     calcBasicSpendingFloor: function(form, sim, i, j) {
         if(form.spending.floor == 'definedValue' && "floorValue" in form.spending) {
-            return Math.min(form.spending.floorValue * sim[i][j].cumulativeInflation, sim[i][j].portfolio.start);
+            return form.spending.floorValue * sim[i][j].cumulativeInflation;
         } else if (form.spending.floor == "pensions" && sim[i][j].socialSecurityAndPensionAdjustments != null){
-            return Math.min(sim[i][j].socialSecurityAndPensionAdjustments, sim[i][j].portfolio.start);
+            return sim[i][j].socialSecurityAndPensionAdjustments;
         }
         return 0;
     },

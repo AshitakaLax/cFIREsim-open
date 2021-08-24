@@ -1,7 +1,7 @@
 /*
 statsModule.js - A template for modular statistical analysis methods for cFIREsim
 
-Required paramters:
+Required parameters:
 Functions must always have the parameters (form, sim) to represent the input form, the simulation container.
 
 All other properties can support the main statistical analysis functions
@@ -114,13 +114,13 @@ var StatsModule = {
 		}
 		//First Table - Success Rates
 		var dataSet1a = [
-			[Math.round(100*this.finalStats.successRate)/100 + "%", accounting.formatMoney(this.finalStats.avgPortfolioAtRetirement, "$", 0)]
+			[Math.round(100*this.finalStats.successRate)/100 + "%", accounting.formatMoney(this.finalStats.avgPortfolioAtRetirement, "$", 2)]
 		];
         $('#stats'+Simulation.tabs+"a").DataTable( {
 			data: dataSet1a,
 			columns: [
-				{ title: "Success Rate" },
-				{ title: "Avg. Portfolio at Retirement" },
+				{ title: "Success Rate", className: "text-right" },
+				{ title: "Avg. Portfolio at Retirement", className: "text-right" },
 			],
 			"ordering": false,
 			"paging": false,
@@ -131,19 +131,19 @@ var StatsModule = {
 
 		//Second Table - General Stats
 		var dataSet1b = [
-			["Average:", accounting.formatMoney(this.finalStats.average.endingPortfolios, "$", 0), accounting.formatMoney(this.finalStats.average.yearlyWithdrawals, "$", 0), accounting.formatMoney(this.finalStats.average.totalWithdrawals, "$", 0)],
-			["Median:", accounting.formatMoney(this.finalStats.median.endingPortfolios, "$", 0), accounting.formatMoney(this.finalStats.median.yearlyWithdrawals, "$", 0), accounting.formatMoney(this.finalStats.median.totalWithdrawals, "$", 0)],
-			["St. Dev.:", accounting.formatMoney(this.finalStats.stDev.endingPortfolios, "$", 0), accounting.formatMoney(this.finalStats.stDev.yearlyWithdrawals, "$", 0), accounting.formatMoney(this.finalStats.stDev.totalWithdrawals, "$", 0)],
-			["Highest:", accounting.formatMoney(this.finalStats.highest.endingPortfolios, "$", 0), accounting.formatMoney(this.finalStats.highest.yearlyWithdrawals, "$", 0), accounting.formatMoney(this.finalStats.highest.totalWithdrawals, "$", 0)],
-			["Lowest:", accounting.formatMoney(this.finalStats.lowest.endingPortfolios, "$", 0), accounting.formatMoney(this.finalStats.lowest.yearlyWithdrawals, "$", 0), accounting.formatMoney(this.finalStats.lowest.totalWithdrawals, "$", 0)],
+			["Average:", accounting.formatMoney(this.finalStats.average.endingPortfolios, "$", 2), accounting.formatMoney(this.finalStats.average.yearlyWithdrawals, "$", 2), accounting.formatMoney(this.finalStats.average.totalWithdrawals, "$", 0)],
+			["Median:", accounting.formatMoney(this.finalStats.median.endingPortfolios, "$", 2), accounting.formatMoney(this.finalStats.median.yearlyWithdrawals, "$", 2), accounting.formatMoney(this.finalStats.median.totalWithdrawals, "$", 0)],
+			["St. Dev.:", accounting.formatMoney(this.finalStats.stDev.endingPortfolios, "$", 2), accounting.formatMoney(this.finalStats.stDev.yearlyWithdrawals, "$", 2), accounting.formatMoney(this.finalStats.stDev.totalWithdrawals, "$", 0)],
+			["Highest:", accounting.formatMoney(this.finalStats.highest.endingPortfolios, "$", 2), accounting.formatMoney(this.finalStats.highest.yearlyWithdrawals, "$", 2), accounting.formatMoney(this.finalStats.highest.totalWithdrawals, "$", 0)],
+			["Lowest:", accounting.formatMoney(this.finalStats.lowest.endingPortfolios, "$", 2), accounting.formatMoney(this.finalStats.lowest.yearlyWithdrawals, "$", 2), accounting.formatMoney(this.finalStats.lowest.totalWithdrawals, "$", 0)],
 		];
         $('#stats'+Simulation.tabs+"b").DataTable( {
 			data: dataSet1b,
 			columns: [
 				{ title: "" },
-				{ title: "Ending Portfolio" },
-				{ title: "Yearly Withdrawals" },
-				{ title: "Total Withdrawals" },
+				{ title: "Ending Portfolio", className: "text-right" },
+				{ title: "Yearly Withdrawals", className: "text-right" },
+				{ title: "Total Withdrawals", className: "text-right" },
 			],
 			"ordering": false,
 			"paging": false,
@@ -153,11 +153,11 @@ var StatsModule = {
 
 		//Third Table - Withdrawal Analysis
 		var dataSet1c = [
-			["Average:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.first5years, "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[0], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[1], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[2], "$", 0)],
-			["Median:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.first5years, "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[0], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[1], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[2], "$", 0),],
-			["St. Dev.:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.first5years, "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[0], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[1], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[2], "$", 0)],
-			["Highest:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.first5years, "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[0], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[1], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[2], "$", 0)],
-			["Lowest:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.first5years, "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[0], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[1], "$", 0), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[2], "$", 0)],
+			["Average:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.first5years, "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[0], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[1], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.average.thirds[2], "$", 2)],
+			["Median:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.first5years, "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[0], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[1], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.median.thirds[2], "$", 2),],
+			["St. Dev.:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.first5years, "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[0], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[1], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.stDev.thirds[2], "$", 2)],
+			["Highest:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.first5years, "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[0], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[1], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.highest.thirds[2], "$", 2)],
+			["Lowest:", accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.first5years, "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[0], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[1], "$", 2), accounting.formatMoney(this.finalStats.withdrawalAnalysis.lowest.thirds[2], "$", 2)],
 			["Failures:", this.finalStats.withdrawalAnalysis.failures.first5years, this.finalStats.withdrawalAnalysis.failures.thirds[0], this.finalStats.withdrawalAnalysis.failures.thirds[1], this.finalStats.withdrawalAnalysis.failures.thirds[2]],
 		];
 		dataSet1c = roundData(dataSet1c);
@@ -165,10 +165,10 @@ var StatsModule = {
 			data: dataSet1c,
 			columns: [
 				{ title: "Withdrawal Analysis" },
-				{ title: "First 5 Years" },
-				{ title: "Beginning Third" },
-				{ title: "Middle Third" },
-				{ title: "Final Third" }
+				{ title: "First 5 Years", className: "text-right" },
+				{ title: "Beginning Third", className: "text-right" },
+				{ title: "Middle Third", className: "text-right" },
+				{ title: "Final Third", className: "text-right" }
 			],
 			"ordering": false,
 			"paging": false,
@@ -187,10 +187,10 @@ var StatsModule = {
             data: dataSet1d,
             columns: [
                 { title: "Dip Analysis" },
-                { title: "Portfolio Dips(cycles)" },
-                { title: "Max Dips(in a cycle)" },
-                { title: "Withdrawal Dips(cycles)" },
-                { title: "Max Dips(in a cycle)" }
+                { title: "Portfolio Dips(cycles)", className: "text-right" },
+                { title: "Max Dips(in a cycle)", className: "text-right" },
+                { title: "Withdrawal Dips(cycles)", className: "text-right" },
+                { title: "Max Dips(in a cycle)", className: "text-right" }
             ],
             "ordering": false,
             "paging": false,
@@ -200,19 +200,19 @@ var StatsModule = {
 
         //Fifth Table - Individual Dips
         var dataSet1e = [
-            ["Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[0].portfolio, "$", 0), this.finalStats.individualDips.portfolioDips[0].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[0].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[0].withdrawal, "$", 0), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
-            ["2nd Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[1].portfolio, "$", 0), this.finalStats.individualDips.portfolioDips[1].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[1].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[1].withdrawal, "$", 0), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
-            ["3rd Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[2].portfolio, "$", 0), this.finalStats.individualDips.portfolioDips[2].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[2].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[2].withdrawal, "$", 0), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
-            ["4th Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[3].portfolio, "$", 0), this.finalStats.individualDips.portfolioDips[3].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[3].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[3].withdrawal, "$", 0), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
-            ["5th Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[4].portfolio, "$", 0), this.finalStats.individualDips.portfolioDips[4].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[4].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[4].withdrawal, "$", 0), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
+            ["Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[0].portfolio, "$", 2), this.finalStats.individualDips.portfolioDips[0].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[0].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[0].withdrawal, "$", 2), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
+            ["2nd Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[1].portfolio, "$", 2), this.finalStats.individualDips.portfolioDips[1].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[1].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[1].withdrawal, "$", 2), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
+            ["3rd Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[2].portfolio, "$", 2), this.finalStats.individualDips.portfolioDips[2].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[2].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[2].withdrawal, "$", 2), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
+            ["4th Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[3].portfolio, "$", 2), this.finalStats.individualDips.portfolioDips[3].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[3].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[3].withdrawal, "$", 2), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
+            ["5th Lowest Dip:", accounting.formatMoney(this.finalStats.individualDips.portfolioDips[4].portfolio, "$", 2), this.finalStats.individualDips.portfolioDips[4].cycleStart + "/" + this.finalStats.individualDips.portfolioDips[4].dipYear, accounting.formatMoney(this.finalStats.individualDips.withdrawalDips[4].withdrawal, "$", 2), this.finalStats.individualDips.withdrawalDips[0].cycleStart + "/" + this.finalStats.individualDips.withdrawalDips[0].dipYear],
         ];
         $('#stats'+Simulation.tabs+"e").DataTable( {
             data: dataSet1e,
             columns: [
                 { title: "Individual Dips" },
-                { title: "Portfolio Dip" },
+                { title: "Portfolio Dip", className: "text-right" },
                 { title: "Cycle Start / Dip Year" },
-                { title: "Withdrawal Dip" },
+                { title: "Withdrawal Dip", className: "text-right" },
                 { title: "Cycle Start / Dip Year" }
             ],
             "ordering": false,
