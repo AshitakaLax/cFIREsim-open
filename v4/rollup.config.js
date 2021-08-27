@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import postcss from 'rollup-plugin-postcss';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -46,6 +47,18 @@ export default {
 				dev: !production
 			}
 		}),
+		postcss({
+      extract: true,
+      minimize: true,
+      use: [
+        [
+          'sass',
+          {
+            includePaths: ['./src/theme', './node_modules'],
+          },
+        ],
+      ],
+    }),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),
